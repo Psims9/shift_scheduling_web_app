@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        {% block title %}
+            <title>Local Library</title>
+        {% endblock %}
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+    </head>
+    <body>
+        {% block sidebar %}
+            <ul class="sidebar-nav">
+                <li><a href="">Employees</a></li>
+                <li><a href="">Shifts</a></li>
+            </ul>
+        {% endblock %}
+    </body>
+    {% block content %}{% endblock %}
+</html>
