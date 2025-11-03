@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         {% block title %}
-            <title>Local Library</title>
+            <title>Shift Scheduler</title>
         {% endblock %}
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -10,7 +10,8 @@
     <body>
         {% block sidebar %}
             <ul class="sidebar-nav">
-                <li><a href="">Employees</a></li>
+                <li><a href="{% url 'index' %}">Home</a></li>
+                <li><a href="{% url 'workers' %}">Workers</a></li>
                 <li><a href="">Shifts</a></li>
             </ul>
         {% endblock %}

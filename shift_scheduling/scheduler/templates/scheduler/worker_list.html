@@ -1,0 +1,14 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <h1>Worker list</h1>
+    {% if worker_list %}
+    <ul>
+        {% for worker in worker_list %}
+            <li><a href="{{worker.get_absolute_url}}">{{worker}}</a></li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>There are no workers yet.</p>
+    {% endif %}
+{% endblock %}
