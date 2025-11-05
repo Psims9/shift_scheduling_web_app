@@ -1,0 +1,52 @@
+{% extends "base_generic.html" %}
+
+{% block style %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+{% endblock %}
+
+{% block content %}
+    <h1>Edit availability for {{worker}}</h1>
+    <form method="post">
+        {% csrf_token %}
+
+        <label>Select unavaiable dates:</label>
+
+        <!-- 
+            visible input used by flatpickr.
+            That <input> is an HTML text input by default.
+            Flatpickr attaches its calendar widget to this text input.
+            The user will see and select dates via the calendar, but behind the scenes it’s still a text input.
+            Flatpickr fills the input’s value with the selected date(s),
+            but in this setup you don’t actually submit it — instead, 
+            you sync the selected dates to the hidden input in JSON format.
+        -->
+
+        <input id="unavailablePicker" placeholder="Pick unavailable dates" />
+
+        <!-- hidden input where we store JSON array for the form -->
+        {{form.unavailable_dates_json}}
+
+        <br><button type="submit">Save</button>
+    </form>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        const initial = {{ initial_dates_json|safe }};
+        const fp = flatpickr("#unavailablePicker", {
+            mode: "multiple",
+            dateFormat: "Y-m-d",
+            defaultDate: initial
+        });
+
+        const hidden = document.querySelector('input[name="unavailable_dates_json"]');
+
+        function syncHidden() {
+            const arr = fp.selectedDates.map(d => fp.formatDate(d, "Y-m-d"));
+            hidden.value = JSON.stringify(arr);
+            }
+        
+        fp.config.onChange.push(syncHidden);
+        syncHidden();
+        document.querySelector('form').addEventListener('submit', syncHidden);
+    </script>
+{% endblock %}

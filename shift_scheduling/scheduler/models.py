@@ -6,6 +6,14 @@ from django.urls import reverse
 class Worker(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
+    unavailable_dates = models.JSONField(default=list, blank=True)
+
+    def is_available_on(self, date_obj):
+        """
+        date_obj: datetime.date
+        returns True if worker is available on that date.
+        """
+        return date_obj.isoformat() not in (self.unavailable_dates or [])
 
     class Meta:
         ordering = ['last_name', 'first_name']
@@ -14,4 +22,4 @@ class Worker(models.Model):
         return reverse('detail-worker', args=[str(self.id)])
     
     def __str__(self):
-        return f'{self.last_name}, {self.first_name}'
+        return f'{self.last_name} {self.first_name}'

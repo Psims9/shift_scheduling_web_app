@@ -1,9 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponseRedirect
 from .models import Worker
 from django.views import generic
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
+from .forms import WorkerAvailabilityForm
+import json
 
 def index(request):
     num_workers = Worker.objects.all().count()
@@ -17,15 +19,41 @@ class WorkerListView(generic.ListView):
 class WorkerDetailView(generic.DetailView):
     model = Worker
 
-class WorkerCreate(CreateView):
+class WorkerCreateView(CreateView):
     model = Worker
     fields = '__all__'
 
-class WorkerUpdate(UpdateView):
+class WorkerUpdateView(UpdateView):
     model = Worker
-    fields = '__all__'
+    fields = ['first_name', 'last_name']
 
-class WorkerDelete(DeleteView):
+def edit_worker_availability(request, pk):
+
+    worker = get_object_or_404(Worker, pk=pk)
+
+    if request.method == 'POST':
+
+        # When you create a ModelForm, it can be bound to an existing model instance.
+        # If instance is not provided, the form will create a new object when saved.
+        form = WorkerAvailabilityForm(request.POST, instance=worker)
+        if form.is_valid():
+            form.save()
+            return redirect('workers')
+        
+    else:
+        form = WorkerAvailabilityForm(instance=worker)
+    
+    initial_dates_json = json.dumps(worker.unavailable_dates or [])
+    context = {
+        'form': form,
+        'worker': worker,
+        'initial_dates_json': initial_dates_json
+    }
+
+    return render(request, 'edit-worker-availability.html', context=context)
+            
+
+class WorkerDeleteView(DeleteView):
     model = Worker
     success_url = reverse_lazy('workers')
 
