@@ -4,7 +4,7 @@ from .models import Worker
 from django.views import generic
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
-from .forms import WorkerAvailabilityForm
+from .forms import WorkerAvailabilityForm, MonthForm
 import json
 
 def index(request):
@@ -63,3 +63,21 @@ class WorkerDeleteView(DeleteView):
             return HttpResponseRedirect(self.success_url)
         except:
             return HttpResponseRedirect('worker-delete', kwargs={'pk': self.object.pk})
+
+def CreateSchedule(request):
+    given_date = None
+
+    if request.method == 'POST':
+        form = MonthForm(request.POST)
+        if form.is_valid():
+            given_date = form.cleaned_data['month']
+
+    else:
+        form = MonthForm()
+
+    context = {
+        'form': form,
+        'given_date': given_date
+    }
+    
+    return render(request, 'create-schedule.html', context=context)

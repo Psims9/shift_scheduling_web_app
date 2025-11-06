@@ -1,6 +1,7 @@
 from django import forms
 from .models import Worker
 import json
+import datetime
 
 class WorkerAvailabilityForm(forms.ModelForm):
     unavailable_dates_json = forms.CharField(widget=forms.HiddenInput(), required=False)
@@ -40,3 +41,11 @@ class WorkerAvailabilityForm(forms.ModelForm):
         if commit:
             inst.save()
         return inst
+    
+
+class MonthForm(forms.Form):
+    month = forms.DateField(
+        widget=forms.DateInput(attrs={'type': 'month'}),
+        input_formats=['%Y-%m'],
+        help_text='Choose scheduling period'
+    )

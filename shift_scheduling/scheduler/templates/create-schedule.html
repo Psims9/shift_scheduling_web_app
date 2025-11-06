@@ -1,0 +1,14 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <h1>Generate Schedule</h1>
+    <form action="" method="post">
+        {% csrf_token %}
+        {{form.month}}
+        <br><br>
+        <button type="submit">Generate</button>
+    </form>
+    {% if given_date %}
+        <p>You entered this date: {{given_date.month}} - {{given_date.year}}</p>
+    {% endif %}
+{% endblock %}
