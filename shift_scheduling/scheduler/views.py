@@ -6,6 +6,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from .forms import WorkerAvailabilityForm, MonthForm
 import json
+from .create_schedule import create_schedule
 
 def index(request):
     num_workers = Worker.objects.all().count()
@@ -65,19 +66,23 @@ class WorkerDeleteView(DeleteView):
             return HttpResponseRedirect('worker-delete', kwargs={'pk': self.object.pk})
 
 def CreateSchedule(request):
-    given_date = None
-
+    solution = None
+    
     if request.method == 'POST':
         form = MonthForm(request.POST)
         if form.is_valid():
-            given_date = form.cleaned_data['month']
-
+            date = form.cleaned_data['month']
+            employees = Worker.objects.all().values('id', 'first_name', 'last_name')
+            employee_ids = [e['id'] for e in employees]
+            solution = create_schedule(date, employee_ids)
+            id_to_name = {e['id']: f"{e['first_name']} {e['last_name']}" for e in employees}
+            solution = {day: tuple(id_to_name[i] for i in ids_tuple) for day, ids_tuple in solution.items()}
     else:
         form = MonthForm()
 
     context = {
         'form': form,
-        'given_date': given_date
+        'solution': solution
     }
     
     return render(request, 'create-schedule.html', context=context)

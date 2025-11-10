@@ -8,7 +8,19 @@
         <br><br>
         <button type="submit">Generate</button>
     </form>
-    {% if given_date %}
-        <p>You entered this date: {{given_date.month}} - {{given_date.year}}</p>
+    {% if solution %}
+        <h2>Generated Schedule</h2>
+        <table border="1" cellpadding="5">
+            <tr>
+                <th>Date</th>
+                <th>Assigned Employees</th>
+            </tr>
+            {% for date, employees in solution.items %}
+                <tr>
+                    <td>{{ date }}</td>
+                    <td>{{ employees }}</td>
+                </tr>
+            {% endfor %}
+        </table>
     {% endif %}
 {% endblock %}
