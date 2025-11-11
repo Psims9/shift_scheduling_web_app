@@ -32,6 +32,24 @@ def create_schedule(schedule_period: datetime.date, employee_data: list[Employee
     max_shifts = model.new_int_var(0, num_days, 'max_shifts')
     model.add_max_equality(max_shifts, employee_shift_count.values())
 
+    month_cal = calendar.monthcalendar(schedule_period.year, schedule_period.month)
+    weekends = []
+    for week in month_cal:
+        for i, day in enumerate(week):
+            if i >= 5 and day != 0:
+                weekends.append(day)
+
+    employee_wknd_shift_count = {e['id']: model.new_int_var(0, len(weekends), f'{e['id']}_wknd_shift_count') for e in employee_data}
+    
+    for e in employee_data:
+        model.add(employee_wknd_shift_count[e['id']] == sum(decision_vars[e['id']][day] for day in weekends))
+    
+    min_wknd_shifts = model.new_int_var(0, len(weekends), 'min_wknd_shifts')
+    model.add_min_equality(min_wknd_shifts, employee_wknd_shift_count.values())
+
+    max_wknd_shifts = model.new_int_var(0, len(weekends), 'max_wknd_shifts')
+    model.add_max_equality(max_wknd_shifts, employee_wknd_shift_count.values())
+
     shift_interval = math.floor(num_days/math.ceil((num_days*2)/len(employee_data)))
 
     shift_interval_violations = []
@@ -53,17 +71,30 @@ def create_schedule(schedule_period: datetime.date, employee_data: list[Employee
 
             shift_interval_violations.append(violation)
         
-    obj_func = max_shifts - min_shifts + sum(shift_interval_violations)
+    obj_func = max_shifts - min_shifts + max_wknd_shifts - min_wknd_shifts + sum(shift_interval_violations)
     model.minimize(obj_func)
     solver = cp_model.CpSolver()
+    solver.parameters.max_time_in_seconds = 10
     status = solver.Solve(model)
 
     if status not in [cp_model.OPTIMAL, cp_model.FEASIBLE]:
         return None
     
-    solution = {}
+    schedule = {}
     for day in range(1, num_days + 1):
-        assigned_employees = tuple(e['id'] for e in employee_data if solver.Value(decision_vars[e['id']][day]) == 1)
-        solution[datetime.date(schedule_period.year, schedule_period.month, day)] = assigned_employees
+        assigned_employees = tuple(e['id'] for e in employee_data if solver.value(decision_vars[e['id']][day]) == 1)
+        schedule[datetime.date(schedule_period.year, schedule_period.month, day)] = assigned_employees
     
-    return solution
+    stats = {
+        'max_shifts_employees': [e['id'] for e in employee_data if solver.value(employee_shift_count[e['id']]) == solver.value(max_shifts)],
+        'min_shifts_employees': [e['id'] for e in employee_data if solver.value(employee_shift_count[e['id']]) == solver.value(min_shifts)],
+        'max_wknd_shifts_employees': [e['id'] for e in employee_data if solver.value(employee_wknd_shift_count[e['id']]) == solver.value(max_wknd_shifts)],
+        'min_wknd_shifts_employees': [e['id'] for e in employee_data if solver.value(employee_wknd_shift_count[e['id']]) == solver.value(min_wknd_shifts)],
+        'shift_interval_solved': solver.value(shift_interval),
+        'solver_status': solver.status_name(status),
+        'solve_time': solver.wall_time,
+        'max_shifts_solved': solver.value(max_shifts),
+        'min_shifts_solved': solver.value(min_shifts), 
+    }
+
+    return schedule, stats

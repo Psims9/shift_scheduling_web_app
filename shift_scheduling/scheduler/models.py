@@ -23,3 +23,10 @@ class Worker(models.Model):
     
     def __str__(self):
         return f'{self.last_name} {self.first_name}'
+
+
+class Schedule(models.Model):
+    employees_count = models.IntegerField()
+    month = models.DateField()
+    schedule = models.JSONField(default=dict)
+    stats = models.JSONField(default=dict)

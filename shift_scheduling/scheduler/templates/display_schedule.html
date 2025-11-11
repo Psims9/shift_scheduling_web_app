@@ -1,0 +1,11 @@
+{% extends "base_generic.html" %}
+
+<h1>{{schedule.month|date:"F Y"}} Schedule</h1>
+<h2>Schedule stats:</h2>
+<p><strong>Number of employees:</strong> {{schedule.employees_count}}</p>
+<p><strong>The following {{schedule.stats.max_shifts_employees|length}} employees were assigned {{schedule.stats.max_shifts_solved}} shifts:</strong></p>
+<ul>
+    {% for e in schedule.stats.max_shifts_employees %}
+        
+    {% endfor %}
+</ul>
