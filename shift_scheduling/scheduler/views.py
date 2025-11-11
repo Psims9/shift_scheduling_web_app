@@ -72,9 +72,9 @@ def CreateSchedule(request):
         form = MonthForm(request.POST)
         if form.is_valid():
             date = form.cleaned_data['month']
-            employees = Worker.objects.all().values('id', 'first_name', 'last_name')
-            employee_ids = [e['id'] for e in employees]
-            solution = create_schedule(date, employee_ids)
+            employees = Worker.objects.all().values()
+            employee_data = [{'id': e['id'], 'avail': e['unavailable_dates']} for e in employees]
+            solution = create_schedule(date, employee_data)
             id_to_name = {e['id']: f"{e['first_name']} {e['last_name']}" for e in employees}
             solution = {day: tuple(id_to_name[i] for i in ids_tuple) for day, ids_tuple in solution.items()}
     else:
