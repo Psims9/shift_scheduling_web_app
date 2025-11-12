@@ -51,7 +51,7 @@ def edit_worker_availability(request, pk):
         'initial_dates_json': initial_dates_json
     }
 
-    return render(request, 'edit-worker-availability.html', context=context)
+    return render(request, 'edit_worker_availability.html', context=context)
             
 
 class WorkerDeleteView(DeleteView):
@@ -63,7 +63,7 @@ class WorkerDeleteView(DeleteView):
             self.object.delete()
             return HttpResponseRedirect(self.success_url)
         except:
-            return HttpResponseRedirect('worker-delete', kwargs={'pk': self.object.pk})
+            return HttpResponseRedirect('worker_delete', kwargs={'pk': self.object.pk})
 
 def CreateSchedule(request):
     success = True
@@ -73,18 +73,24 @@ def CreateSchedule(request):
         if form.is_valid():
             month = form.cleaned_data['month']
             employees = Worker.objects.all().values()
-            employee_data = [{'id': e['id'], 'avail': e['unavailable_dates']} for e in employees]
+            employee_data = {}
+            for e in employees:
+                employee_data[e['id']] = {
+                    'unavailable_dates': e['unavailable_dates'],
+                    'full_name': f'{e['first_name']} {e['last_name']}'
+                }
+
             result = create_schedule(month, employee_data)
             if result == None:
                 success = False
             else:
-                schedule, stats = result
-                Schedule.objects.create(
-                    month = month,
+                schedule, employee_stats = result
+                new_schedule = Schedule.objects.create(
+                    month=month,
                     schedule=schedule,
-                    stats=stats,
-                    employees_count = employees.count()
+                    employee_stats=employee_stats
                 )
+                return redirect('display_schedule', pk=new_schedule.pk)
 
     else:
         form = MonthForm()

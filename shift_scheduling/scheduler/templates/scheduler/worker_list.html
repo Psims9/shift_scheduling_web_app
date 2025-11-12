@@ -2,11 +2,11 @@
 
 {% block content %}
     <h1>Worker list</h1>
-    <a href="{% url 'worker-create' %}">Add new worker</a>
+    <a href="{% url 'worker_create' %}">Add new worker</a>
     {% if worker_list %}
     <ul>
         {% for worker in worker_list %}
-            <li><a href="{{worker.get_absolute_url}}">{{worker}}</a> - (<a href="{% url 'worker-update' worker.id %}">Edit</a> / <a href="{% url 'worker-delete' worker.id %}">Delete</a>)</li>
+            <li><a href="{{worker.get_absolute_url}}">{{worker}}</a> - (<a href="{% url 'worker_update' worker.id %}">Edit</a> / <a href="{% url 'worker_delete' worker.id %}">Delete</a>)</li>
         {% endfor %}
     </ul>
     {% else %}

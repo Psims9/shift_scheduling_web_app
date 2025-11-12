@@ -1,11 +1,51 @@
 {% extends "base_generic.html" %}
 
-<h1>{{schedule.month|date:"F Y"}} Schedule</h1>
-<h2>Schedule stats:</h2>
-<p><strong>Number of employees:</strong> {{schedule.employees_count}}</p>
-<p><strong>The following {{schedule.stats.max_shifts_employees|length}} employees were assigned {{schedule.stats.max_shifts_solved}} shifts:</strong></p>
-<ul>
-    {% for e in schedule.stats.max_shifts_employees %}
-        
-    {% endfor %}
-</ul>
+{% block content %}
+<h1>{{ schedule.month|date:"F Y" }} Schedule</h1>
+
+<h2>Schedule per day</h2>
+<table border="1" cellpadding="5" cellspacing="0">
+    <thead>
+        <tr>
+            <th>Day</th>
+            <th>Assigned Employees</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for day, employees in schedule.schedule.items %}
+        <tr>
+            <td>{{ day }}</td>
+            <td>
+                {% for emp_id in employees %}
+                    {{ emp_id }}{% if not forloop.last %}, {% endif %}
+                {% endfor %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h2>Schedule per employee</h2>
+<table border="1" cellpadding="5" cellspacing="0">
+    <thead>
+        <tr>
+            <th>Employee ID</th>
+            <th>Assigned Days</th>
+            <th>Weekend Shifts</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for emp_id, stats in schedule.employee_stats.items %}
+        <tr>
+            <td>{{ emp_id }}</td>
+            <td>
+                {% for day in stats.days %}
+                    {{ day }}{% if not forloop.last %}, {% endif %}
+                {% endfor %}
+            </td>
+            <td>{{ stats.weekends }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
