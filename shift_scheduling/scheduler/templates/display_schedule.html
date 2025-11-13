@@ -4,6 +4,17 @@
 <h1>{{ schedule.month|date:"F Y" }} Schedule</h1>
 
 <p><strong>Solution:</strong> {{schedule.schedule_stats.status}}</p>
+<p><strong>Max shifts - min shifts:</strong> {{schedule.schedule_stats.max_shifts_min_shifts}}</p>
+<p><strong>Max weekend shifts - min shifts weekend shifts:</strong> {{schedule.schedule_stats.max_wknd_shifts_min_wknd_shifts}}</p>
+<p><strong>Minimum 1-shift-max interval:</strong> {{schedule.schedule_stats.theoretical_intervals}} days</p>
+<p><strong>Interval violations:</strong> {{schedule.schedule_stats.interval_violations|length}}</p>
+{% if schedule.schedule_stats.interval_violations %}
+    <ul>
+        {% for violation in schedule.schedule_stats.interval_violations %}
+            <li>{{violation}}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
 
 <h2>Per day</h2>
 <table border="1" cellpadding="5" cellspacing="0" style="width: 27%;">
