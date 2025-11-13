@@ -84,7 +84,11 @@ def create_schedule(schedule_period: datetime.date, employee_data: dict):
 
     for day in range(1, num_days + 1):
         employees_by_names = [employee_data[e]['full_name'] for e in employee_data if solver.value(decision_vars[e][day]) == 1]
-        schedule[day] = tuple(employees_by_names)
+
+        date = datetime.date(schedule_period.year, schedule_period.month, day)
+        month = f'{date.day}/{date.month}/{date.year}'
+        
+        schedule[month] = tuple(employees_by_names)
         
         for employee_name in employees_by_names:
             if employee_name not in employee_stats:
@@ -93,7 +97,7 @@ def create_schedule(schedule_period: datetime.date, employee_data: dict):
                     'weekends': 0
                 }
 
-            employee_stats[employee_name]['days'].append(day)
+            employee_stats[employee_name]['days'].append(month)
 
             if day in weekends:
                 employee_stats[employee_name]['weekends'] += 1
