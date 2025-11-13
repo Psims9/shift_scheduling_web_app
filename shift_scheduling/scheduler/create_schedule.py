@@ -70,10 +70,11 @@ def create_schedule(schedule_period: datetime.date, employee_data: dict):
 
             shift_interval_violations.append(violation)
         
-    obj_func = max_shifts - min_shifts + max_wknd_shifts - min_wknd_shifts + sum(shift_interval_violations)
+    coef = [10, 3.5, 1.5]
+    obj_func = coef[0]*(max_shifts - min_shifts) + coef[1]*(max_wknd_shifts - min_wknd_shifts) + coef[2]*sum(shift_interval_violations)
     model.minimize(obj_func)
     solver = cp_model.CpSolver()
-    solver.parameters.max_time_in_seconds = 10
+    solver.parameters.max_time_in_seconds = 3
     status = solver.Solve(model)
 
     if status not in [cp_model.OPTIMAL, cp_model.FEASIBLE]:
@@ -83,10 +84,10 @@ def create_schedule(schedule_period: datetime.date, employee_data: dict):
     employee_stats = {}   
 
     for day in range(1, num_days + 1):
-        employees_by_names = [employee_data[e]['full_name'] for e in employee_data if solver.value(decision_vars[e][day]) == 1]
+        employees_by_names = [employee_data[e]['full_name'] + f' (id: {e})' for e in employee_data if solver.value(decision_vars[e][day]) == 1]
 
         date = datetime.date(schedule_period.year, schedule_period.month, day)
-        month = f'{date.day}/{date.month}/{date.year}'
+        month = f'{date.strftime('%a')} - {date.day}/{date.month}/{date.year}'
         
         schedule[month] = tuple(employees_by_names)
         
@@ -101,5 +102,22 @@ def create_schedule(schedule_period: datetime.date, employee_data: dict):
 
             if day in weekends:
                 employee_stats[employee_name]['weekends'] += 1
+    
+    interval_violation_stats = {'total_violations': 0, 'intervals_violated': []}
+    for i in range(len(shift_interval_violations)):
+        if solver.value(shift_interval_violations[i]) == 1:
+            interval_violation_stats['total_violations'] += 1
+            interval_violation_stats['intervals_violated'].append(shift_interval_violations[i].Name())
+
+    
+    schedule_stats = {
+        'max_shifts - min_shifts': solver.value(max_shifts) - solver.value(min_shifts),
+        'max_wknd_shifts - min_wknd_shifts': solver.value(max_wknd_shifts) - solver.value(min_wknd_shifts),
+        'obj_function_value': solver.ObjectiveValue(),
+        'status': solver.StatusName(),
+        'theoretical_intervals': solver.value(shift_interval),
+        'interval_violations_stats': interval_violation_stats
+
+    }
             
-    return schedule, employee_stats
+    return schedule, schedule_stats, employee_stats

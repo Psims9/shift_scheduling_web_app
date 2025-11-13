@@ -10,4 +10,6 @@ urlpatterns = [
     path('worker/<int:pk>/delete/', views.WorkerDeleteView.as_view(), name='worker_delete'),
     path('worker/<int:pk>/availability', views.edit_worker_availability, name='edit_worker_availability'),
     path('schedule/<int:pk>', views.DisplaySchedule, name='display_schedule'),
+    path('schedules/', views.ScheduleListView.as_view(), name='schedules'),
+    path('schedule/<int:pk>/delete/', views.ScheduleDeleteView.as_view(), name='schedule_delete'),
 ]

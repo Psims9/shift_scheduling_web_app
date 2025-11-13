@@ -71,7 +71,7 @@ def CreateSchedule(request):
     if request.method == 'POST':
         form = MonthForm(request.POST)
         if form.is_valid():
-            month = form.cleaned_data['month']
+            date = form.cleaned_data['month']
             employees = Worker.objects.all().values()
             employee_data = {}
             for e in employees:
@@ -80,14 +80,15 @@ def CreateSchedule(request):
                     'full_name': f'{e['first_name']} {e['last_name']}'
                 }
 
-            result = create_schedule(month, employee_data)
+            result = create_schedule(date, employee_data)
             if result == None:
                 success = False
             else:
-                schedule, employee_stats = result
+                schedule, schedule_stats, employee_stats = result
                 new_schedule = Schedule.objects.create(
-                    month=month,
+                    date=date,
                     schedule=schedule,
+                    schedule_stats = schedule_stats,
                     employee_stats=employee_stats
                 )
                 return redirect('display_schedule', pk=new_schedule.pk)
@@ -105,3 +106,18 @@ def CreateSchedule(request):
 def DisplaySchedule(request, pk):
     schedule = Schedule.objects.get(pk=pk)
     return render(request, 'display_schedule.html', context={'schedule': schedule})
+
+class ScheduleListView(generic.ListView):
+    model = Schedule
+    paginate_by: 10
+
+class ScheduleDeleteView(generic.DeleteView):
+    model = Schedule
+    success_url = reverse_lazy('schedules')
+
+    def form_valid(self, form):
+        try:
+            self.object.delete()
+            return HttpResponseRedirect(self.success_url)
+        except:
+            return HttpResponseRedirect('schedule_delete', kwargs={'pk': self.object.pk})

@@ -26,15 +26,16 @@ class Worker(models.Model):
 
 
 class Schedule(models.Model):
-    month = models.DateField()
+    date = models.DateField()
     schedule = models.JSONField(default=dict)
+    schedule_stats = models.JSONField(default=dict)
     employee_stats = models.JSONField(default=dict)
 
     def get_absolute_url(self):
         return reverse('detail_schedule', args=[str(self.id)])
 
     def __str__(self):
-        return f'{self.month} schedule'
+        return self.date.strftime("%B %Y")
     
     class Meta:
-        ordering = ['month']
+        ordering = ['date']

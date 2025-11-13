@@ -3,6 +3,8 @@
 {% block content %}
 <h1>{{ schedule.month|date:"F Y" }} Schedule</h1>
 
+<p><strong>Solution:</strong> {{schedule.schedule_stats.status}}</p>
+
 <h2>Per day</h2>
 <table border="1" cellpadding="5" cellspacing="0" style="width: 27%;">
     <thead>
@@ -33,19 +35,17 @@
         <tr>
             <th style="text-align: center; vertical-align: middle;">Employee ID</th>
             <th style="text-align: center; vertical-align: middle;">Assigned Days</th>
-            <th style="text-align: center; vertical-align: middle;">Weekend Shifts</th>
         </tr>
     </thead>
     <tbody>
-        {% for emp_id, stats in schedule.employee_stats.items %}
+        {% for e, stats in schedule.employee_stats.items %}
         <tr>
-            <td style="text-align: center; vertical-align: middle;">{{ emp_id }}</td>
+            <td style="text-align: center; vertical-align: middle;">{{ e }}</td>
             <td style="text-align: center; vertical-align: middle;">
                 {% for day in stats.days %}
                     <div>{{ day }}</div>
                 {% endfor %}
             </td>
-            <td style="text-align: center; vertical-align: middle;">{{ stats.weekends }}</td>
         </tr>
         {% endfor %}
     </tbody>

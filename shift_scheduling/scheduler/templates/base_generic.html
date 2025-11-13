@@ -11,9 +11,10 @@
     <body>
         {% block sidebar %}
             <ul class="sidebar-nav">
-                <li><a href="{% url 'create_schedule' %}">Home</a></li>
-                <li><a href="{% url 'workers' %}">Workers</a></li>
+                <li><a href="{% url 'create_schedule' %}">Create schedule</a></li>
+                <li><a href="{% url 'workers' %}">Employees</a></li>
                 <li><a href="">Shifts</a></li>
+                <li><a href="{% url 'schedules' %}">Schedules archive</a></li>
             </ul>
         {% endblock %}
     </body>

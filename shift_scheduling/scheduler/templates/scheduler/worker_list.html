@@ -6,7 +6,7 @@
     {% if worker_list %}
     <ul>
         {% for worker in worker_list %}
-            <li><a href="{{worker.get_absolute_url}}">{{worker}}</a> - (<a href="{% url 'worker_update' worker.id %}">Edit</a> / <a href="{% url 'worker_delete' worker.id %}">Delete</a>)</li>
+            <li><a href="{{worker.get_absolute_url}}">{{worker}}</a>
         {% endfor %}
     </ul>
     {% else %}
