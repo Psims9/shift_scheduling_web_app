@@ -3,21 +3,21 @@
 {% block content %}
 <h1>{{ schedule.month|date:"F Y" }} Schedule</h1>
 
-<h2>Schedule per day</h2>
-<table border="1" cellpadding="5" cellspacing="0">
+<h2>Per day</h2>
+<table border="1" cellpadding="5" cellspacing="0" style="width: 27%;">
     <thead>
         <tr>
-            <th>Day</th>
-            <th>Assigned Employees</th>
+            <th style="text-align: center; vertical-align: middle;">Day</th>
+            <th style="text-align: center; vertical-align: middle;">Assigned Employees</th>
         </tr>
     </thead>
     <tbody>
         {% for day, employees in schedule.schedule.items %}
         <tr>
-            <td>{{ day }}</td>
-            <td>
+            <td style="text-align: center; vertical-align: middle;">{{ day }}</td>
+            <td style="text-align: center; vertical-align: middle;">
                 {% for emp_id in employees %}
-                    {{ emp_id }}{% if not forloop.last %}, {% endif %}
+                    <div>{{ emp_id }}</div>
                 {% endfor %}
             </td>
         </tr>
@@ -25,25 +25,27 @@
     </tbody>
 </table>
 
-<h2>Schedule per employee</h2>
-<table border="1" cellpadding="5" cellspacing="0">
+<br>
+
+<h2>Per employee</h2>
+<table border="1" cellpadding="5" cellspacing="0" style="width: 27%;">
     <thead>
         <tr>
-            <th>Employee ID</th>
-            <th>Assigned Days</th>
-            <th>Weekend Shifts</th>
+            <th style="text-align: center; vertical-align: middle;">Employee ID</th>
+            <th style="text-align: center; vertical-align: middle;">Assigned Days</th>
+            <th style="text-align: center; vertical-align: middle;">Weekend Shifts</th>
         </tr>
     </thead>
     <tbody>
         {% for emp_id, stats in schedule.employee_stats.items %}
         <tr>
-            <td>{{ emp_id }}</td>
-            <td>
+            <td style="text-align: center; vertical-align: middle;">{{ emp_id }}</td>
+            <td style="text-align: center; vertical-align: middle;">
                 {% for day in stats.days %}
-                    {{ day }}{% if not forloop.last %}, {% endif %}
+                    <div>{{ day }}</div>
                 {% endfor %}
             </td>
-            <td>{{ stats.weekends }}</td>
+            <td style="text-align: center; vertical-align: middle;">{{ stats.weekends }}</td>
         </tr>
         {% endfor %}
     </tbody>
