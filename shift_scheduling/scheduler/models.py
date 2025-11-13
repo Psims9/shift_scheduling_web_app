@@ -19,7 +19,22 @@ class Worker(models.Model):
         ordering = ['last_name', 'first_name']
     
     def get_absolute_url(self):
-        return reverse('detail-worker', args=[str(self.id)])
+        return reverse('detail_worker', args=[str(self.id)])
     
     def __str__(self):
         return f'{self.last_name} {self.first_name}'
+
+
+class Schedule(models.Model):
+    month = models.DateField()
+    schedule = models.JSONField(default=dict)
+    employee_stats = models.JSONField(default=dict)
+
+    def get_absolute_url(self):
+        return reverse('detail_schedule', args=[str(self.id)])
+
+    def __str__(self):
+        return f'{self.month} schedule'
+    
+    class Meta:
+        ordering = ['month']

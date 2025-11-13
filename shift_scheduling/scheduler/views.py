@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponseRedirect
-from .models import Worker
+from .models import Worker, Schedule
 from django.views import generic
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
@@ -51,7 +51,7 @@ def edit_worker_availability(request, pk):
         'initial_dates_json': initial_dates_json
     }
 
-    return render(request, 'edit-worker-availability.html', context=context)
+    return render(request, 'edit_worker_availability.html', context=context)
             
 
 class WorkerDeleteView(DeleteView):
@@ -63,26 +63,45 @@ class WorkerDeleteView(DeleteView):
             self.object.delete()
             return HttpResponseRedirect(self.success_url)
         except:
-            return HttpResponseRedirect('worker-delete', kwargs={'pk': self.object.pk})
+            return HttpResponseRedirect('worker_delete', kwargs={'pk': self.object.pk})
 
 def CreateSchedule(request):
-    solution = None
+    success = True
     
     if request.method == 'POST':
         form = MonthForm(request.POST)
         if form.is_valid():
-            date = form.cleaned_data['month']
+            month = form.cleaned_data['month']
             employees = Worker.objects.all().values()
-            employee_data = [{'id': e['id'], 'avail': e['unavailable_dates']} for e in employees]
-            solution = create_schedule(date, employee_data)
-            id_to_name = {e['id']: f"{e['first_name']} {e['last_name']}" for e in employees}
-            solution = {day: tuple(id_to_name[i] for i in ids_tuple) for day, ids_tuple in solution.items()}
+            employee_data = {}
+            for e in employees:
+                employee_data[e['id']] = {
+                    'unavailable_dates': e['unavailable_dates'],
+                    'full_name': f'{e['first_name']} {e['last_name']}'
+                }
+
+            result = create_schedule(month, employee_data)
+            if result == None:
+                success = False
+            else:
+                schedule, employee_stats = result
+                new_schedule = Schedule.objects.create(
+                    month=month,
+                    schedule=schedule,
+                    employee_stats=employee_stats
+                )
+                return redirect('display_schedule', pk=new_schedule.pk)
+
     else:
         form = MonthForm()
 
     context = {
         'form': form,
-        'solution': solution
+        'success': success
     }
     
-    return render(request, 'create-schedule.html', context=context)
+    return render(request, 'create_schedule.html', context=context)
+
+def DisplaySchedule(request, pk):
+    schedule = Schedule.objects.get(pk=pk)
+    return render(request, 'display_schedule.html', context={'schedule': schedule})

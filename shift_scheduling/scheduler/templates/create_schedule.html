@@ -1,0 +1,14 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <h1>Generate Schedule</h1>
+    <form action="" method="post">
+        {% csrf_token %}
+        {{form.month}}
+        <br><br>
+        <button type="submit">Generate</button>
+    </form>
+    {% if not success %}
+        <p>Time limit exceeded, something's wrong.</p>
+    {% endif %}
+{% endblock %}
