@@ -3,7 +3,6 @@
 {% block content %}
 <h1>{{ schedule.schedule_period|date:"F Y" }} Schedule</h1>
 
-<p><strong>Solution:</strong> {{ schedule.schedule_stats.status }}</p>
 <p><strong>Max shifts - min shifts difference:</strong> {{ schedule.schedule_stats.max_shifts_min_shifts }}</p>
 <p><strong>Max weekend shifts - min weekend shifts difference:</strong> {{ schedule.schedule_stats.max_wknd_shifts_min_wknd_shifts }}</p>
 <p><strong>Theoretical minimum 1-shift-max interval:</strong> {{ schedule.schedule_stats.theoretical_intervals }} days</p>
@@ -11,7 +10,7 @@
 {% if schedule.schedule_stats.interval_violations %}
     <ul>
         {% for violation in schedule.schedule_stats.interval_violations %}
-            <li>{{ violation }}</li>
+            <li>{{violation}}</li>
         {% endfor %}
     </ul>
 {% endif %}
@@ -25,18 +24,13 @@
         </tr>
     </thead>
     <tbody>
-        {# iterate dict items: key = date string, value = dict of workers #}
-        {% for day, workers in schedule.per_day_schedule.items %}
+        {% for day in schedule.per_day_schedule %}
         <tr>
-            <td style="text-align: center; vertical-align: middle;">{{ day }}</td>
+            <td style="text-align: center; vertical-align: middle;">{{ day.iso_date }}</td>
             <td style="text-align: center; vertical-align: middle;">
-                {% if workers %}
-                    {% for e_id, worker in workers.items %}
-                        <div>{{ worker.name }}</div>
-                    {% endfor %}
-                {% else %}
-                    <div>No one assigned</div>
-                {% endif %}
+                {% for employee in day.daily_employees %}
+                    <div>{{ employee.name }} (id: {{ employee.id }})</div>
+                {% endfor %}
             </td>
         </tr>
         {% endfor %}
@@ -54,18 +48,13 @@
         </tr>
     </thead>
     <tbody>
-        {# iterate employee dict items: key = employee id, value = {'name': ..., 'days': [...]} #}
-        {% for e_id, emp in schedule.per_employee_schedule.items %}
+        {% for employee in schedule.per_employee_schedule %}
         <tr>
-            <td style="text-align: center; vertical-align: middle;">{{ emp.name }}</td>
+            <td style="text-align: center; vertical-align: middle;">{{ employee.name }} (id: {{employee.id}})</td>
             <td style="text-align: center; vertical-align: middle;">
-                {% if emp.days %}
-                    {% for date in emp.days %}
-                        <div>{{ date }}</div>
-                    {% endfor %}
-                {% else %}
-                    <div>—</div>
-                {% endif %}
+                {% for day in employee.days %}
+                    <div>{{ day }}</div>
+                {% endfor %}
             </td>
         </tr>
         {% endfor %}

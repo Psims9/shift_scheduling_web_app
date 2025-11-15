@@ -105,11 +105,16 @@ def create_schedule(schedule_period: datetime.date, employees):
 
     for e in employees:
         per_employee_schedule.append({'id': e.id, 'name': str(e), 'days': employee_day_map[e.id]})
+
+    interval_violations = []
+    for i in range(len(shift_interval_violations)):
+        if solver.value(shift_interval_violations[i]) == 1:
+            interval_violations.append(shift_interval_violations[i].Name())        
     
     schedule_stats = {
         'max_shifts_min_shifts': solver.value(obj_1),
         'max_wknd_shifts_min_wknd_shifts': solver.value(obj_2),
-        'interval_violations': solver.ObjectiveValue(),
+        'interval_violations': interval_violations,
         'theoretical_intervals': solver.value(shift_interval),
     }
             
