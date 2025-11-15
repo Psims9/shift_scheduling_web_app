@@ -71,25 +71,21 @@ def CreateSchedule(request):
     if request.method == 'POST':
         form = MonthForm(request.POST)
         if form.is_valid():
-            date = form.cleaned_data['month']
-            employees = Worker.objects.all().values()
-            employee_data = {}
-            for e in employees:
-                employee_data[e['id']] = {
-                    'unavailable_dates': e['unavailable_dates'],
-                    'full_name': f'{e['first_name']} {e['last_name']}'
-                }
+            schedule_period = form.cleaned_data['schedule_period']
+            employees = Worker.objects.all()
 
-            result = create_schedule(date, employee_data)
+            result = create_schedule(schedule_period, employees)
+
             if result == None:
                 success = False
+                
             else:
-                schedule, schedule_stats, employee_stats = result
+                per_day_schedule, per_employee_schedule, schedule_stats = result
                 new_schedule = Schedule.objects.create(
-                    date=date,
-                    schedule=schedule,
+                    schedule_period=schedule_period,
+                    per_day_schedule=per_day_schedule,
+                    per_employee_schedule=per_employee_schedule,
                     schedule_stats = schedule_stats,
-                    employee_stats=employee_stats
                 )
                 return redirect('display_schedule', pk=new_schedule.pk)
 

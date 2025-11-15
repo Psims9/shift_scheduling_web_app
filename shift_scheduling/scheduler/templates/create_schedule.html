@@ -4,7 +4,7 @@
     <h1>Create Schedule</h1>
     <form action="" method="post">
         {% csrf_token %}
-        {{form.month}}
+        {{form.schedule_period}}
         <br><br>
         <button type="submit">Generate</button>
     </form>
