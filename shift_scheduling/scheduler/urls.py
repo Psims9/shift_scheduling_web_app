@@ -12,4 +12,5 @@ urlpatterns = [
     path('schedule/<int:pk>', views.DisplaySchedule, name='display_schedule'),
     path('schedules/', views.ScheduleListView.as_view(), name='schedules'),
     path('schedule/<int:pk>/delete/', views.ScheduleDeleteView.as_view(), name='schedule_delete'),
+    path('schedule/<int:pk>/downolad_csv', views.download_schedule_csv, name='schedule_download_csv'),
 ]

@@ -3,6 +3,8 @@
 {% block content %}
 <h1>{{ schedule.schedule_period|date:"F Y" }} Schedule</h1>
 
+<a href="{% url 'schedule_download_csv' schedule.id %}">Download csv</a>
+
 <p><strong>Max shifts - min shifts difference:</strong> {{ schedule.schedule_stats.max_shifts_min_shifts }}</p>
 <p><strong>Max weekend shifts - min weekend shifts difference:</strong> {{ schedule.schedule_stats.max_wknd_shifts_min_wknd_shifts }}</p>
 <p><strong>Theoretical minimum 1-shift-max interval:</strong> {{ schedule.schedule_stats.theoretical_intervals }} days</p>

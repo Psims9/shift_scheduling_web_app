@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from .models import Worker, Schedule
 from django.views import generic
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -7,6 +7,7 @@ from django.urls import reverse_lazy
 from .forms import WorkerAvailabilityForm, MonthForm
 import json
 from .create_schedule import create_schedule
+import csv
 
 def index(request):
     num_workers = Worker.objects.all().count()
@@ -117,3 +118,18 @@ class ScheduleDeleteView(generic.DeleteView):
             return HttpResponseRedirect(self.success_url)
         except:
             return HttpResponseRedirect('schedule_delete', kwargs={'pk': self.object.pk})
+        
+def download_schedule_csv(request, pk):
+    schedule = Schedule.objects.get(pk=pk)
+
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attatchment; filename="schedule.csv"'
+
+    writer = csv.writer(response, delimiter=';')
+    writer.writerow(['Day', 'ID', 'Employees'])
+
+    for day_data in schedule.per_day_schedule:
+        for e in day_data['daily_employees']:
+            writer.writerow([day_data['iso_date'], e['id'], e['name']])
+    
+    return response
