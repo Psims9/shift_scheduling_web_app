@@ -1,32 +1,52 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        {% block title %}
-            <title>Shift Scheduler</title>
-        {% endblock %}
-        {% block style %}{% endblock %}
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-    </head>
-    <body>
-        {% block sidebar %}
+<head>
+    {% block title %}
+        <title>Shift Scheduler</title>
+    {% endblock %}
+    <!-- link the stylesheet -->
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    {% block style %}{% endblock %}
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
+<body>
+    <header class="page-header">
+        <button id="menuToggle" class="menu-toggle" aria-expanded="false" aria-label="Open menu">
+            ☰
+        </button>
+        <h1 class="site-title">Shift Scheduler</h1>
+    </header>
+
+    {% block sidebar %}
+        <nav id="sidebar" class="sidebar" aria-hidden="true">
+            <button id="closeMenu" class="menu-close" aria-label="Close menu">✕</button>
             <ul class="sidebar-nav">
                 <li><a href="{% url 'create_schedule' %}">Create schedule</a></li>
                 <li><a href="{% url 'workers' %}">Employees</a></li>
                 <li><a href="{% url 'schedules' %}">Schedules archive</a></li>
             </ul>
-        {% endblock %}
-    </body>
-    {% block content %}{% endblock %}
-    {% block pagination %}
-        {% if is_paginated %}
-            {% if page_obj.has_previous %}
-                <a href="{{request.path}}?page={{page_obj.previous_page_number}}">previous</a>
-            {% endif %}
-            <span>Page {{page_obj.number}} of {{page_obj.paginator.num_pages}}.</span>
-            {% if page_obj.has_next %}
-                <a href="{{request.path}}?page={{page_obj.next_page_number}}">next</a>
-            {% endif %}
-        {% endif %}
+        </nav>
     {% endblock %}
+
+    <main id="mainContent" class="main-content">
+        {% block content %}{% endblock %}
+        {% block pagination %}
+            {% if is_paginated %}
+                <div class="pagination">
+                    {% if page_obj.has_previous %}
+                        <a href="{{request.path}}?page={{page_obj.previous_page_number}}">previous</a>
+                    {% endif %}
+                    <span>Page {{page_obj.number}} of {{page_obj.paginator.num_pages}}.</span>
+                    {% if page_obj.has_next %}
+                        <a href="{{request.path}}?page={{page_obj.next_page_number}}">next</a>
+                    {% endif %}
+                </div>
+            {% endif %}
+        {% endblock %}
+    </main>
+
+    <script src="{% static 'js/menu.js' %}"></script>
+</body>
 </html>

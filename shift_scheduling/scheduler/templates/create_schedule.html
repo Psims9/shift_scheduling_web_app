@@ -1,14 +1,24 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-    <h1>Create Schedule</h1>
-    <form action="" method="post">
+<div class="content-section">
+    <h1 class="section-title">Create Schedule</h1>
+
+    <form action="" method="post" class="form-section">
         {% csrf_token %}
-        {{form.schedule_period}}
-        <br><br>
-        <button type="submit">Generate</button>
+
+        <div class="form-group">
+            {{ form.schedule_period.label_tag }}
+            {{ form.schedule_period }}
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn-primary">Generate</button>
+        </div>
     </form>
+
     {% if not success %}
-        <p>Time limit exceeded, something's wrong.</p>
+        <p class="empty-message">Time limit exceeded, something's wrong.</p>
     {% endif %}
+</div>
 {% endblock %}

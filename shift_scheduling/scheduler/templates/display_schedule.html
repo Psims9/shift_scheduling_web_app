@@ -1,65 +1,76 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-<h1>{{ schedule.schedule_period|date:"F Y" }} Schedule</h1>
+<div class="content-section">
+    <h1 class="section-title">{{ schedule.schedule_period|date:"F Y" }} Schedule</h1>
 
-<a href="{% url 'schedule_download_csv' schedule.id %}">Download csv</a>
+    <div class="action-bar">
+        <a class="btn-primary" href="{% url 'schedule_download_csv' schedule.id %}">
+            Download CSV
+        </a>
+    </div>
 
-<p><strong>Max shifts - min shifts difference:</strong> {{ schedule.schedule_stats.max_shifts_min_shifts }}</p>
-<p><strong>Max weekend shifts - min weekend shifts difference:</strong> {{ schedule.schedule_stats.max_wknd_shifts_min_wknd_shifts }}</p>
-<p><strong>Theoretical minimum 1-shift-max interval:</strong> {{ schedule.schedule_stats.theoretical_intervals }} days</p>
-<p><strong>Interval violations:</strong> {{ schedule.schedule_stats.interval_violations|length }}</p>
-{% if schedule.schedule_stats.interval_violations %}
-    <ul>
-        {% for violation in schedule.schedule_stats.interval_violations %}
-            <li>{{violation}}</li>
-        {% endfor %}
-    </ul>
-{% endif %}
+    <div class="schedule-stats">
+        <p><strong>Max shifts - min shifts difference:</strong> {{ schedule.schedule_stats.max_shifts_min_shifts }}</p>
+        <p><strong>Max weekend shifts - min weekend shifts difference:</strong> {{ schedule.schedule_stats.max_wknd_shifts_min_wknd_shifts }}</p>
+        <p><strong>Theoretical minimum 1-shift-max interval:</strong> {{ schedule.schedule_stats.theoretical_intervals }} days</p>
+        <p><strong>Interval violations:</strong> {{ schedule.schedule_stats.interval_violations|length }}</p>
 
-<h2>Per day</h2>
-<table border="1" cellpadding="5" cellspacing="0" style="width: 27%;">
-    <thead>
-        <tr>
-            <th style="text-align: center; vertical-align: middle;">Day</th>
-            <th style="text-align: center; vertical-align: middle;">Assigned Employees</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for day in schedule.per_day_schedule %}
-        <tr>
-            <td style="text-align: center; vertical-align: middle;">{{ day.iso_date }}</td>
-            <td style="text-align: center; vertical-align: middle;">
-                {% for employee in day.daily_employees %}
-                    <div>{{ employee.name }} (id: {{ employee.id }})</div>
+        {% if schedule.schedule_stats.interval_violations %}
+            <ul class="item-list">
+                {% for violation in schedule.schedule_stats.interval_violations %}
+                    <li class="item-list-row">{{ violation }}</li>
                 {% endfor %}
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+            </ul>
+        {% endif %}
+    </div>
 
-<br>
-
-<h2>Per employee</h2>
-<table border="1" cellpadding="5" cellspacing="0" style="width: 27%;">
-    <thead>
-        <tr>
-            <th style="text-align: center; vertical-align: middle;">Employee Name</th>
-            <th style="text-align: center; vertical-align: middle;">Assigned Days</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for employee in schedule.per_employee_schedule %}
-        <tr>
-            <td style="text-align: center; vertical-align: middle;">{{ employee.name }} (id: {{employee.id}})</td>
-            <td style="text-align: center; vertical-align: middle;">
-                {% for day in employee.days %}
-                    <div>{{ day }}</div>
+    <h2 class="section-title">Per Day</h2>
+    <div class="table-wrapper">
+        <table class="styled-table">
+            <thead>
+                <tr>
+                    <th>Day</th>
+                    <th>Assigned Employees</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for day in schedule.per_day_schedule %}
+                <tr>
+                    <td>{{ day.iso_date }}</td>
+                    <td>
+                        {% for employee in day.daily_employees %}
+                            <div>{{ employee.name }} (id: {{ employee.id }})</div>
+                        {% endfor %}
+                    </td>
+                </tr>
                 {% endfor %}
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+            </tbody>
+        </table>
+    </div>
+
+    <h2 class="section-title">Per Employee</h2>
+    <div class="table-wrapper">
+        <table class="styled-table">
+            <thead>
+                <tr>
+                    <th>Employee Name</th>
+                    <th>Assigned Days</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for employee in schedule.per_employee_schedule %}
+                <tr>
+                    <td>{{ employee.name }} (id: {{ employee.id }})</td>
+                    <td>
+                        {% for day in employee.days %}
+                            <div>{{ day }}</div>
+                        {% endfor %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 {% endblock %}

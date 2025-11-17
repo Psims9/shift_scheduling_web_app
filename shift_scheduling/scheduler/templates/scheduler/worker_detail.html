@@ -1,8 +1,24 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-    <h1>{{worker}}</h1>
-    <a href="{% url 'edit_worker_availability' worker.id %}">Edit worker availability</a> | <a href="{% url 'worker_update' worker.id %}">Edit worker info</a> | </li><a href="{% url 'worker_delete' worker.id %}">Delete</a>
-    <p><strong>First name:</strong> {{worker.first_name}}</p>
-    <p><strong>Last name:</strong> {{worker.last_name}}</p>
+<div class="content-section">
+    <h1 class="section-title">{{ worker }}</h1>
+
+    <div class="action-bar">
+        <a class="btn-primary" href="{% url 'edit_worker_availability' worker.id %}">
+            Edit availability
+        </a>
+        <a class="btn-primary" href="{% url 'worker_update' worker.id %}">
+            Edit info
+        </a>
+        <a class="btn-danger" href="{% url 'worker_delete' worker.id %}">
+            Delete
+        </a>
+    </div>
+
+    <div class="worker-details">
+        <p><strong>First name:</strong> {{ worker.first_name }}</p>
+        <p><strong>Last name:</strong> {{ worker.last_name }}</p>
+    </div>
+</div>
 {% endblock %}

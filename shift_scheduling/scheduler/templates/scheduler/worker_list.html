@@ -1,15 +1,27 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-    <h1>Worker list</h1>
-    <a href="{% url 'worker_create' %}">Add new worker</a>
+<div class="content-section">
+    <h1 class="section-title">Worker List</h1>
+
+    <div class="action-bar">
+        <a class="btn-primary" href="{% url 'worker_create' %}">
+            + Add new worker
+        </a>
+    </div>
+
     {% if worker_list %}
-    <ul>
-        {% for worker in worker_list %}
-            <li><a href="{{worker.get_absolute_url}}">{{worker}}</a>
-        {% endfor %}
-    </ul>
+        <ul class="item-list">
+            {% for worker in worker_list %}
+                <li class="item-list-row">
+                    <a class="item-link" href="{{ worker.get_absolute_url }}">
+                        {{ worker }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
     {% else %}
-    <p>There are no workers yet.</p>
+        <p class="empty-message">There are no workers yet.</p>
     {% endif %}
+</div>
 {% endblock %}

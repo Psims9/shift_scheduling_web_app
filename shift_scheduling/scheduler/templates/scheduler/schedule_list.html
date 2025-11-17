@@ -1,15 +1,31 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-    <h1>Schedules</h1>
-    <a href="{% url 'create_schedule' %}">Create new schedule</a>
+<div class="content-section">
+    <h1 class="section-title">Schedules</h1>
+
+    <div class="action-bar">
+        <a class="btn-primary" href="{% url 'create_schedule' %}">
+            + Create new schedule
+        </a>
+    </div>
+
     {% if schedule_list %}
-        <ul>
+        <ul class="item-list">
             {% for schedule in schedule_list %}
-                <li><a href="{% url 'display_schedule' schedule.id %}">{{schedule}}</a> - <a href="{% url 'schedule_delete' schedule.id %}">Delete</a></li>
+                <li class="item-list-row">
+                    <a class="item-link" href="{% url 'display_schedule' schedule.id %}">
+                        {{ schedule }}
+                    </a>
+
+                    <a class="delete-link" href="{% url 'schedule_delete' schedule.id %}">
+                        Delete
+                    </a>
+                </li>
             {% endfor %}
         </ul>
     {% else %}
-        <p>There are no schedules.</p>
+        <p class="empty-message">There are no schedules.</p>
     {% endif %}
+</div>
 {% endblock %}
