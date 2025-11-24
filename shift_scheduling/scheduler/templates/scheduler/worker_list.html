@@ -4,11 +4,9 @@
 <div class="content-section">
     <h1 class="section-title">Worker List</h1>
 
-    <div class="action-bar">
-        <a class="btn-primary" href="{% url 'worker_create' %}">
-            + Add new worker
-        </a>
-    </div>
+    <a class="btn-primary" href="{% url 'worker_create' %}">
+        + Add new worker
+    </a>
 
     {% if worker_list %}
         <ul class="item-list">
