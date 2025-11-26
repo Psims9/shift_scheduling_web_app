@@ -14,8 +14,8 @@
             </thead>
             <tbody>
                 {% for worker in worker_list %}
-                    <tr>
-                        <td><a href="{% url 'detail_worker' worker.id %}" class="worker-detail-link">{{ worker.id }}</a></td>
+                    <tr onclick="window.location.href='{{ worker.get_absolute_url }}'">
+                        <td>{{ worker.id }}</td>
                         <td>{{ worker.first_name }}</td>
                         <td> {{ worker.last_name }}</td>
                     </tr>
