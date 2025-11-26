@@ -10,8 +10,15 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="stylesheet" href="{% static 'css/reset.css' %}"/>
         <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+        
     </head>
+
     <body>
+
         <header class="page-header">
             <button id="menuToggle" class="menu-toggle">
                 ☰
@@ -20,6 +27,7 @@
                 Shift Scheduling App
             </h1>
         </header>
+
         {% block sidebar %}
             <nav id="sidebar" class="sidebar">
                 <button id="closeMenu" class="menu-close">✕</button>
@@ -31,19 +39,9 @@
             </nav>
         {% endblock %}
 
-        {% block content %}{% endblock %}
-
-        {% block pagination %}
-            {% if is_paginated %}
-                {% if page_obj.has_previous %}
-                    <a href="{{request.path}}?page={{page_obj.previous_page_number}}">previous</a>
-                {% endif %}
-                <span>Page {{page_obj.number}} of {{page_obj.paginator.num_pages}}.</span>
-                {% if page_obj.has_next %}
-                    <a href="{{request.path}}?page={{page_obj.next_page_number}}">next</a>
-                {% endif %}
-            {% endif %}
-        {% endblock %}
+        <main class="page-content">
+            {% block content %}{% endblock %}
+        </main>
 
         <script src="{% static 'js/scripts.js' %}"></script>
     </body>

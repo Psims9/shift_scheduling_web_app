@@ -2,13 +2,26 @@
 
 {% block content %}
     <h1>Worker list</h1>
-    <a href="{% url 'worker_create' %}">Add new worker</a>
+    <a href="{% url 'worker_create' %}" class="add-new-btn">+ Add new</a>
     {% if worker_list %}
-    <ul>
-        {% for worker in worker_list %}
-            <li><a href="{{worker.get_absolute_url}}">{{worker}}</a>
-        {% endfor %}
-    </ul>
+        <table class="employee-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>First name</th>
+                    <th>Last name</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for worker in worker_list %}
+                    <tr>
+                        <td><a href="{% url 'detail_worker' worker.id %}" class="worker-detail-link">{{ worker.id }}</a></td>
+                        <td>{{ worker.first_name }}</td>
+                        <td> {{ worker.last_name }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     {% else %}
     <p>There are no workers yet.</p>
     {% endif %}

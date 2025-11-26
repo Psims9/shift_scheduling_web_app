@@ -15,7 +15,7 @@ def index(request):
 
 class WorkerListView(generic.ListView):
     model = Worker
-    paginate_by = 10
+    
 
 class WorkerDetailView(generic.DetailView):
     model = Worker
