@@ -157,39 +157,6 @@ body {
     margin-bottom: 1.5rem;
 }
 
-.worker-card {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 0.5rem;
-    width: auto;
-    padding: 0.7rem;
-    border: 1px solid white;
-    border-radius: 6px;
-    margin: 0 auto;
-}
-
-.attr-label {
-    justify-self: end;
-}
-
-.worker-list {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 0.7rem;
-    margin-top: 1rem;
-}
-
-.worker-card-link {
-    text-decoration: none;
-    color: inherit;
-}
-
-.worker-card-link:hover {
-    text-decoration: underline;
-    background: rgb(65, 65, 65);
-}
-
 b {
     font-weight: 600;
 }
@@ -211,4 +178,30 @@ b {
 
 .search-bar::placeholder {
     color: rgb(200, 200, 200);
+}
+
+.employee-table {
+    margin-top: 1rem;
+    width: 100%;
+    
+}
+
+.employee-detail-link {
+    color: inherit;
+    text-decoration: none;
+}
+
+.employee-detail-link:hover {
+    text-decoration: underline;
+}
+
+.employee-table-data,
+.employee-table-header {
+    padding: 0.7rem;
+    text-align: left;
+}
+
+.employee-table-data-row,
+.employee-table-header-row {
+    border-bottom: 1px solid rgb(120, 120, 120);
 }

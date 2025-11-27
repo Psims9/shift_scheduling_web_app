@@ -3,38 +3,46 @@
 {% block content %}
     <h1>Worker list</h1>
     <div class="worker-list-header">
-        <input type="text" id="searchInput" placeholder="Search employees..." class="search-bar">
         <a href="{% url 'worker_create' %}" class="add-new-btn">+ Add new</a>
+        <input type="text" id="searchInput" placeholder="Search employees..." class="search-bar">
     </div>
     {% if worker_list %}
-        <div class="worker-list">
-            {% for worker in worker_list %}
-                <a  href="{{ worker.get_absolute_url }}" class="worker-card-link">
-                    <div class="worker-card">
-                        <span class="attr-label"><b>ID:</b></span><span>{{worker.id}}</span>
-                        <span class="attr-label"><b>Name:</b></span><span>{{worker}}</span>
-                    </div>
-                </a>
-            {% endfor %}
-        </div>
+        <table class="employee-table">
+            <thead>
+                <tr class="employee-table-header-row">
+                    <th class="employee-table-header"><b>ID</b></th>
+                    <th class="employee-table-header"><b>Name</b></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for worker in worker_list %}
+                    <tr class="employee-table-data-row">
+                        <td class="employee-table-data">{{worker.id}}</td>
+                        <td class="employee-table-data"><a href="{{ worker.get_absolute_url }}" class="employee-detail-link">{{worker}}</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     {% else %}
     <p>There are no workers yet.</p>
     {% endif %}
 
     <script>
         const searchInput = document.getElementById('searchInput');
-        const workerCards = document.querySelectorAll('.worker-card');
+        const tableRows = document.querySelectorAll('.employee-table-data-row');
 
-        searchInput.addEventListener('input', function(e) {
-
+        searchInput.addEventListener('input', function (e) {
             const query = e.target.value.toLowerCase();
 
-            workerCards.forEach(card => {
-                const name = card.querySelector('span:nth-child(4)').textContent.toLowerCase();
-                if(name.includes(query)) {
-                    card.parentElement.style.display = '';
+            tableRows.forEach(row => {
+                const nameCell = row.querySelector('.employee-table-data:nth-child(2)');
+                const nameText = nameCell.textContent.toLowerCase();
+
+                // Show/hide row based on match
+                if (nameText.includes(query)) {
+                    row.style.display = '';
                 } else {
-                    card.parentElement.style.display = 'none';
+                    row.style.display = 'none';
                 }
             });
         });
