@@ -87,7 +87,7 @@ body {
     background: rgb(65, 65, 65);
 }
 .page-content {
-    width: 80%;
+    width: 85%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -143,44 +143,7 @@ body {
     background-color: rgb(0, 85, 0);
 }
 
-.employee-table {
-    width: 100%;
-    margin-top: 2rem;
-    margin-bottom: 2rem;
-    border-radius: 6px;
-}
-
-.employee-table th {
-    text-align: center;
-    font-weight: 600;
-    border-bottom: 1px solid white;
-    padding: 0.5rem 0.75rem;
-}
-
-.employee-table td {
-    text-align: center;
-    border-bottom: 1px solid white;
-    padding: 0.80rem;
-}
-
-.employee-table tr {
-    display: grid;
-    grid-template-columns: 1fr 4fr 4fr;
-}
-
-.employee-table tbody tr {
-    cursor: pointer;
-}
-
-.employee-table tbody tr:hover {
-    background-color: rgb(65, 65, 65);
-}
-
-.employee-table tbody tr:hover td {
-    text-decoration: underline;
-}
-
-.page-content > * {
+.create-schedule-content > * {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -192,4 +155,41 @@ body {
 
 .month-form input {
     margin-bottom: 1.5rem;
+}
+
+.worker-card {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.5rem;
+    width: auto;
+    padding: 0.7rem;
+    border: 1px solid white;
+    border-radius: 6px;
+    margin: 0 auto;
+}
+
+.attr-label {
+    justify-self: end;
+}
+
+.worker-list {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    margin-top: 1rem;
+}
+
+.worker-card-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.worker-card-link:hover {
+    text-decoration: underline;
+    background: rgb(65, 65, 65);
+}
+
+b {
+    font-weight: 600;
 }

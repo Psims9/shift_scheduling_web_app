@@ -2,27 +2,38 @@
 
 {% block content %}
     <h1>Worker list</h1>
+    <input type="text" id="searchInput" placeholder="Search workers..." class="search-bar">
     <a href="{% url 'worker_create' %}" class="add-new-btn">+ Add new</a>
     {% if worker_list %}
-        <table class="employee-table">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>First name</th>
-                    <th>Last name</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for worker in worker_list %}
-                    <tr onclick="window.location.href='{{ worker.get_absolute_url }}'">
-                        <td>{{ worker.id }}</td>
-                        <td>{{ worker.first_name }}</td>
-                        <td> {{ worker.last_name }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <div class="worker-list">
+            {% for worker in worker_list %}
+                <a  href="{{ worker.get_absolute_url }}" class="worker-card-link">
+                    <div class="worker-card">
+                        <span class="attr-label"><b>ID:</b></span><span>{{worker.id}}</span>
+                        <span class="attr-label"><b>Name:</b></span><span>{{worker}}</span>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
     {% else %}
     <p>There are no workers yet.</p>
     {% endif %}
+
+    <script>
+    const searchInput = document.getElementById('searchInput');
+    const workerCards = document.querySelectorAll('.worker-card');
+
+    searchInput.addEventListener('input', function() {
+        const query = this.value.toLowerCase();
+        workerCards.forEach(card => {
+            const name = card.querySelector('span:nth-child(4)').textContent.toLowerCase();
+            if(name.includes(query)) {
+                card.parentElement.style.display = ''; // show link wrapper
+            } else {
+                card.parentElement.style.display = 'none'; // hide link wrapper
+            }
+        });
+    });
+</script>
+
 {% endblock %}
