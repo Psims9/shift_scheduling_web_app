@@ -2,8 +2,10 @@
 
 {% block content %}
     <h1>Worker list</h1>
-    <input type="text" id="searchInput" placeholder="Search workers..." class="search-bar">
-    <a href="{% url 'worker_create' %}" class="add-new-btn">+ Add new</a>
+    <div class="worker-list-header">
+        <input type="text" id="searchInput" placeholder="Search employees..." class="search-bar">
+        <a href="{% url 'worker_create' %}" class="add-new-btn">+ Add new</a>
+    </div>
     {% if worker_list %}
         <div class="worker-list">
             {% for worker in worker_list %}
@@ -20,20 +22,22 @@
     {% endif %}
 
     <script>
-    const searchInput = document.getElementById('searchInput');
-    const workerCards = document.querySelectorAll('.worker-card');
+        const searchInput = document.getElementById('searchInput');
+        const workerCards = document.querySelectorAll('.worker-card');
 
-    searchInput.addEventListener('input', function() {
-        const query = this.value.toLowerCase();
-        workerCards.forEach(card => {
-            const name = card.querySelector('span:nth-child(4)').textContent.toLowerCase();
-            if(name.includes(query)) {
-                card.parentElement.style.display = ''; // show link wrapper
-            } else {
-                card.parentElement.style.display = 'none'; // hide link wrapper
-            }
+        searchInput.addEventListener('input', function(e) {
+
+            const query = e.target.value.toLowerCase();
+
+            workerCards.forEach(card => {
+                const name = card.querySelector('span:nth-child(4)').textContent.toLowerCase();
+                if(name.includes(query)) {
+                    card.parentElement.style.display = '';
+                } else {
+                    card.parentElement.style.display = 'none';
+                }
+            });
         });
-    });
-</script>
+    </script>
 
 {% endblock %}

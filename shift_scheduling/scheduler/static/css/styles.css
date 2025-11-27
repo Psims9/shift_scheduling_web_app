@@ -193,3 +193,22 @@ body {
 b {
     font-weight: 600;
 }
+
+.worker-list-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.search-bar {
+    border-radius: 6px;
+    border: 0;
+    background-color: rgb(65, 65, 65);
+    cursor: text;
+    color: white;
+    padding: 0.5rem;
+}
+
+.search-bar::placeholder {
+    color: rgb(200, 200, 200);
+}
