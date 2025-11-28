@@ -1,11 +1,12 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-    <form action="" method="post">
+<h1>Rename {{worker}}</h1>
+    <form method="post" class="employee-edit-form">
         {% csrf_token %}
-        <table>
+        <table class="employee-edit-table">
             {{form.as_table}}
         </table>
-        <input type="submit" value="Submit"/>
+        <button class="form-submit-btn">Save</button>
     </form>
 {% endblock %}

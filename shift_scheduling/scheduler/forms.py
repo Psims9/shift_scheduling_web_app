@@ -4,6 +4,7 @@ import json
 
 class WorkerAvailabilityForm(forms.ModelForm):
     unavailable_dates_json = forms.CharField(widget=forms.HiddenInput(), required=False)
+    
 
     class Meta:
         model = Worker

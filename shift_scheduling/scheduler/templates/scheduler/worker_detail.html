@@ -2,7 +2,9 @@
 
 {% block content %}
     <h1>{{worker}}</h1>
-    <a href="{% url 'edit_worker_availability' worker.id %}">Edit worker availability</a> | <a href="{% url 'worker_update' worker.id %}">Edit worker info</a> | </li><a href="{% url 'worker_delete' worker.id %}">Delete</a>
-    <p><strong>First name:</strong> {{worker.first_name}}</p>
-    <p><strong>Last name:</strong> {{worker.last_name}}</p>
+    <div class="employee-options">
+        <a href="{% url 'edit_worker_availability' worker.id %}" class="edit-employee-info-btn">Availability</a>
+        <a href="{% url 'worker_update' worker.id %}" class="edit-employee-avail-btn">Rename</a>
+        <a href="{% url 'worker_delete' worker.id %}" class="delete-employee-btn">Delete</a>
+    </div>
 {% endblock %}

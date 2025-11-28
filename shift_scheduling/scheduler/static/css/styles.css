@@ -93,15 +93,15 @@ body {
     align-items: center;
     justify-content: flex-start;
     min-height: calc(100vh - 55px);
-    padding-top: 3.5rem;
+    padding-top: 2.5rem;
     max-width: 800px;
-    margin: 0 auto;
+    margin: 0 auto 2rem;
 }
 
 .page-content h1 {
     text-align: center;
-    font-size: 2.5rem;
-    margin-bottom: 2.5rem;
+    font-size: 2rem;
+    margin-bottom: 2rem;
 }
 
 .month-input {
@@ -110,23 +110,27 @@ body {
     color: white;
     border-radius: 6px;
     border: 0;
+    margin-bottom: 1.5rem;
 }
 
-.general-btn {
-    padding: 0.4rem 0.8rem;
+.month-input:hover {
+    cursor: pointer;
+    background-color: rgb(85, 85, 85);
+}
+
+.form-submit-btn {
+    padding: 0.5rem 1rem;
     border-radius: 6px;
     border: 0;
     background-color: white;
     cursor: pointer;
+    font: inherit;
+    font-weight: 450;
 }
 
-.general-btn:hover {
+.form-submit-btn:hover {
     background: rgb(200, 200, 200);
     text-decoration: underline;
-}
-
-.page-content label {
-    font-size: 1.1rem;
 }
 
 .add-new-btn {
@@ -149,20 +153,18 @@ body {
     align-items: center;
 }
 
-.month-form label {
+label {
     margin-bottom: 1rem;
 }
 
-.month-form input {
-    margin-bottom: 1.5rem;
-}
 
 b {
     font-weight: 600;
 }
 
-.worker-list-header {
+.employee-list-header {
     width: 100%;
+    max-width: 600px;
     display: flex;
     justify-content: space-between;
 }
@@ -183,7 +185,7 @@ b {
 .employee-table {
     margin-top: 1rem;
     width: 100%;
-    
+    max-width: 600px;
 }
 
 .employee-detail-link {
@@ -204,4 +206,86 @@ b {
 .employee-table-data-row,
 .employee-table-header-row {
     border-bottom: 1px solid rgb(120, 120, 120);
+}
+
+.employee-options {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    width: 9rem;
+}
+
+.edit-employee-info-btn,
+.edit-employee-avail-btn {
+    text-align: center;
+    padding: 0.7rem 1rem;
+    border-radius: 6px;
+    text-decoration: none;
+    color: inherit;
+    background-color: rgb(65, 65, 65);
+    cursor: pointer;
+}
+
+.delete-employee-btn {
+    text-align: center;
+    padding: 0.7rem 1rem;
+    border-radius: 6px;
+    text-decoration: none;
+    color: rgba(255, 110, 110, 0.7);
+    background-color: rgba(255, 65, 65, 0.15);
+    cursor: pointer;
+    font-weight: 450;
+}
+
+.edit-employee-info-btn:hover,
+.edit-employee-avail-btn:hover {
+    background-color: rgb(85, 85, 85);
+    text-decoration: underline;
+}
+
+.delete-employee-btn:hover {
+    background-color: rgba(255, 65, 65, 0.25);
+    text-decoration: underline;
+}
+
+.avail-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.flatpickr-input {
+    padding: 0.4rem;
+    background-color: rgb(65, 65, 65);
+    color: white;
+    border-radius: 6px;
+    border: 0;
+    margin-bottom: 1.5rem;
+}
+
+.flatpickr-input:hover {
+    cursor: pointer;
+    background-color: rgb(85, 85, 85);
+}
+
+.employee-edit-table td,
+.employee-edit-table th {
+    padding: 0.6rem 0.4rem;
+}
+
+.employee-edit-table input {
+    padding: 0.4rem;
+    background-color: rgb(65, 65, 65);
+    color: white;
+    border-radius: 6px;
+    border: 0;
+}
+
+.employee-edit-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.2rem;
 }
