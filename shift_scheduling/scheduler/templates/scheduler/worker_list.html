@@ -1,9 +1,9 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-    <h1>Worker list</h1>
-    <div class="employee-list-header">
-        <a href="{% url 'worker_create' %}" class="add-new-btn">+ Add new</a>
+    <h1 class="page-title">Worker list</h1>
+    <div class="employee-list-functions-container">
+        <a href="{% url 'worker_create' %}" class="add-new-button">+ Add new</a>
         <input type="text" id="searchInput" placeholder="Search employees..." class="search-bar">
     </div>
     {% if worker_list %}

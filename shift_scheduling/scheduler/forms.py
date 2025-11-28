@@ -46,7 +46,7 @@ class WorkerAvailabilityForm(forms.ModelForm):
 class MonthForm(forms.Form):
     schedule_period = forms.DateField(
         label="Select month",
-        widget=forms.DateInput(attrs={'type': 'month', 'class': 'month-input'}),
+        widget=forms.DateInput(attrs={'type': 'month', 'class': 'form-input-field'}),
         input_formats=['%Y-%m'],
         help_text='Choose scheduling period'
     )

@@ -22,7 +22,7 @@ class WorkerDetailView(generic.DetailView):
 
 class WorkerCreateView(CreateView):
     model = Worker
-    fields = '__all__'
+    fields = ['first_name', 'last_name']
 
 class WorkerUpdateView(UpdateView):
     model = Worker

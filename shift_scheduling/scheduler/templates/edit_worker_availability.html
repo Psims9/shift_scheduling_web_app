@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block content %}
-    <h1>{{worker}}</h1>
+    <h1 class="page-title">{{worker}}</h1>
     <form method="post" class="avail-form">
         {% csrf_token %}
 
@@ -15,7 +15,7 @@
 
         {{form.unavailable_dates_json}}
 
-        <button type="submit" class="form-submit-btn">Save</button>
+        <button type="submit" class="form-submit-button">Save</button>
     </form>
 
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>

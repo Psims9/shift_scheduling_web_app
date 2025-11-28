@@ -1,3 +1,6 @@
+
+/* DOCUMENT */
+
 html {
     color: white;
     font-family: "Roboto", sans-serif;
@@ -7,16 +10,21 @@ html {
     font-variation-settings: "wdth" 100;
 }
 
+
+/* BODY */
+
 body {
     background-color: rgb(35, 35, 35);
-    margin: 0 auto;
 }
+
+
+/* SITE-HEADER */
 
 .page-header {
     position: sticky;
     top: 0;
     z-index: 40;
-    height:55px;
+    height:4rem;
     display: flex;
     align-items: center;
     gap: 0.8rem;
@@ -30,11 +38,14 @@ body {
 
 .menu-toggle {
     border: 0;
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     background-color: transparent;
     color: inherit;
     cursor: pointer;
 }
+
+
+/* SIDEBAR */
 
 .sidebar {
     position: fixed;
@@ -43,14 +54,14 @@ body {
     height: 100vh;
     z-index: 50;
     width: 270px;
-    max-width: 85vh;
+    max-width: 85vw;
     background-color: rgb(25, 25, 25);
     padding: 1rem;
     display: flex;
     flex-direction: column;
-    gap: 1rem;
     transform: translateX(-110%);
     transition: transform 300ms cubic-bezier(.2,.9,.2,1);
+    gap: 1rem;
 }
 
 .sidebar.is-open {transform: translateX(0);}
@@ -68,9 +79,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    padding: 1rem;
 }
-
 
 .sidebar a {
     text-decoration: none;
@@ -78,7 +87,6 @@ body {
     color: inherit;
     border-radius: 6px;
     padding: 0.6rem;
-    
     display: block;
 }
 
@@ -86,87 +94,44 @@ body {
 {
     background: rgb(65, 65, 65);
 }
+
+
+/* MAIN SECTION */
+
 .page-content {
     width: 85%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
     min-height: calc(100vh - 55px);
     padding-top: 2.5rem;
     max-width: 800px;
-    margin: 0 auto 2rem;
+    margin: 0 auto;
 }
 
-.page-content h1 {
+.page-title {
     text-align: center;
     font-size: 2rem;
-    margin-bottom: 2rem;
+    margin-bottom: 3rem;
 }
 
-.month-input {
-    padding: 0.4rem;
-    background-color: rgb(65, 65, 65);
-    color: white;
-    border-radius: 6px;
-    border: 0;
-    margin-bottom: 1.5rem;
-}
 
-.month-input:hover {
-    cursor: pointer;
-    background-color: rgb(85, 85, 85);
-}
+/* CREATE SCHEDULE PAGE */
 
-.form-submit-btn {
-    padding: 0.5rem 1rem;
-    border-radius: 6px;
-    border: 0;
-    background-color: white;
-    cursor: pointer;
-    font: inherit;
-    font-weight: 450;
-}
-
-.form-submit-btn:hover {
-    background: rgb(200, 200, 200);
-    text-decoration: underline;
-}
-
-.add-new-btn {
-    align-self: flex-start;
-    text-decoration: none;
-    padding: 0.7rem;
-    border-radius: 6px;
-    background-color: rgb(0, 70, 0);
-    color: rgb(0, 160, 0);
-    font-weight: 450;
-}
-
-.add-new-btn:hover {
-    background-color: rgb(0, 85, 0);
-}
-
-.create-schedule-content > * {
+.month-selection-form {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-label {
-    margin-bottom: 1rem;
-}
 
+/* EMPLOYEE LIST PAGE */
 
-b {
-    font-weight: 600;
-}
-
-.employee-list-header {
+.employee-list-functions-container {
     width: 100%;
-    max-width: 600px;
     display: flex;
     justify-content: space-between;
+    max-width: 600px;
 }
 
 .search-bar {
@@ -208,7 +173,71 @@ b {
     border-bottom: 1px solid rgb(120, 120, 120);
 }
 
-.employee-options {
+
+/* INPUT FIELDS */
+
+.form-input-field {
+    padding: 0.4rem;
+    background-color: rgb(65, 65, 65);
+    color: white;
+    border-radius: 6px;
+    border: 0;
+    margin-bottom: 1.5rem;
+}
+
+.form-input-field:hover {
+    cursor: pointer;
+    background-color: rgb(85, 85, 85);
+}
+
+/* BUTTONS */
+
+.form-submit-button {
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    border: 0;
+    background-color: white;
+    cursor: pointer;
+    font: inherit;
+    font-weight: 450;
+}
+
+.form-submit-button:hover {
+    background: rgb(200, 200, 200);
+    text-decoration: underline;
+}
+
+.add-new-button {
+    align-self: flex-start;
+    text-decoration: none;
+    padding: 0.7rem;
+    border-radius: 6px;
+    background-color: rgb(0, 70, 0);
+    color: rgb(0, 160, 0);
+    font-weight: 450;
+}
+
+.add-new-button:hover {
+    background-color: rgb(0, 85, 0);
+}
+
+
+/* INPUT FIELD LABELS */
+
+label {
+    margin-bottom: 1rem;
+}
+
+
+/* OTHER */
+
+b {
+    font-weight: 600;
+}
+
+/* EMPLOYEE DETAIL PAGE */
+
+.employee-options-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -217,8 +246,8 @@ b {
     width: 9rem;
 }
 
-.edit-employee-info-btn,
-.edit-employee-avail-btn {
+.edit-employee-info-button,
+.edit-employee-avail-button {
     text-align: center;
     padding: 0.7rem 1rem;
     border-radius: 6px;
@@ -228,7 +257,7 @@ b {
     cursor: pointer;
 }
 
-.delete-employee-btn {
+.delete-employee-button {
     text-align: center;
     padding: 0.7rem 1rem;
     border-radius: 6px;
@@ -237,18 +266,21 @@ b {
     background-color: rgba(255, 65, 65, 0.15);
     cursor: pointer;
     font-weight: 450;
+    border: 0;
 }
 
-.edit-employee-info-btn:hover,
-.edit-employee-avail-btn:hover {
+.edit-employee-info-button:hover,
+.edit-employee-avail-button:hover {
     background-color: rgb(85, 85, 85);
     text-decoration: underline;
 }
 
-.delete-employee-btn:hover {
+.delete-employee-button:hover {
     background-color: rgba(255, 65, 65, 0.25);
     text-decoration: underline;
 }
+
+/* EMPLOYEE AVAILABILITY */
 
 .avail-form {
     display: flex;
@@ -270,6 +302,9 @@ b {
     background-color: rgb(85, 85, 85);
 }
 
+
+/* EMPLOYEE INFO EDIT */
+
 .employee-edit-table td,
 .employee-edit-table th {
     padding: 0.6rem 0.4rem;
@@ -288,4 +323,37 @@ b {
     flex-direction: column;
     align-items: center;
     gap: 1.2rem;
+}
+
+
+/* DISPLAY SCHEDULE */
+
+.schedule-type {
+    font-size: 1.5rem;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.schedule-table {
+    margin-top: 1rem;
+    width: 100%;
+    max-width: 600px;
+    margin-bottom: 1rem;
+}
+
+.schedule-table-data,
+.schedule-table-header {
+    padding: 0.5rem;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.schedule-table-row {
+    border-bottom: 1px solid rgb(120, 120, 120);
+}
+
+.assigned-employess-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
 }
