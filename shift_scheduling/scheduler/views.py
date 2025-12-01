@@ -68,8 +68,9 @@ class WorkerDeleteView(DeleteView):
 
 def CreateSchedule(request):
     success = True
-    
+
     if request.method == 'POST':
+
         form = MonthForm(request.POST)
         if form.is_valid():
             schedule_period = form.cleaned_data['schedule_period']
@@ -88,6 +89,7 @@ def CreateSchedule(request):
                     per_employee_schedule=per_employee_schedule,
                     schedule_stats = schedule_stats,
                 )
+
                 return redirect('display_schedule', pk=new_schedule.pk)
 
     else:

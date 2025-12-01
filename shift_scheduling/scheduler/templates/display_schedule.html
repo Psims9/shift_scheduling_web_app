@@ -3,11 +3,11 @@
 {% block content %}
     <h1 class="page-title">{{ schedule.schedule_period|date:"F Y" }}</h1>
     <div class="schedule-button-container">
-        <a href="{% url 'download_schedule_csv' schedule.id %}" class="download-csv-button">CSV</a>
-        <a href="{% url 'download_schedule_csv' schedule.id %}" class="download-pdf-button">PDF</a>
-        <a href="{% url 'schedule_delete' schedule.id %}" class="delete-schedule-button">Delete</a>
+        <a href="{% url 'download_schedule_csv' schedule.id %}" class="general-button">CSV</a>
+        <a href="{% url 'download_schedule_csv' schedule.id %}" class="general-button">PDF</a>
+        <a href="{% url 'schedule_delete' schedule.id %}" class="delete-button">Delete</a>
     </div>
-    <h2 class="schedule-type">Per day</h2>
+    <h2 class="section-type">Per day</h2>
     <table class="schedule-table">
         <thead>
             <tr class="schedule-table-row">
@@ -33,7 +33,7 @@
 
 
 
-    <h2 class="schedule-type">Per employee</h2>
+    <h2 class="section-type">Per employee</h2>
     <table class="schedule-table">
         <thead>
             <tr class="schedule-table-row">
@@ -57,7 +57,7 @@
         </tbody>
     </table>
 
-    <h2 class="schedule-type">Schedule stats</h2>
+    <h2 class="section-type">Schedule stats</h2>
 
     <table class="schedule-table">
         <tr class="schedule-table-row">

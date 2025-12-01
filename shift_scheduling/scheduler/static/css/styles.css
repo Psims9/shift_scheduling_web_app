@@ -2,7 +2,16 @@
 /* DOCUMENT */
 
 html {
+    font-size: 16px;
+}
+
+
+/* BODY */
+
+body {
     color: white;
+    background-color: rgb(35, 35, 35);
+
     font-family: "Roboto", sans-serif;
     font-optical-sizing: auto;
     font-weight: 200;
@@ -11,16 +20,9 @@ html {
 }
 
 
-/* BODY */
-
-body {
-    background-color: rgb(35, 35, 35);
-}
-
-
 /* SITE-HEADER */
 
-.page-header {
+.header {
     position: sticky;
     top: 0;
     z-index: 40;
@@ -51,17 +53,22 @@ body {
     position: fixed;
     top: 0;
     left: 0;
-    height: 100vh;
     z-index: 50;
+
+    height: 100vh;
     width: 270px;
     max-width: 85vw;
+
     background-color: rgb(25, 25, 25);
+
     padding: 1rem;
+
     display: flex;
     flex-direction: column;
+    gap: 1rem;
+
     transform: translateX(-110%);
     transition: transform 300ms cubic-bezier(.2,.9,.2,1);
-    gap: 1rem;
 }
 
 .sidebar.is-open {transform: translateX(0);}
@@ -75,13 +82,13 @@ body {
     cursor: pointer;
 }
 
-.sidebar ul {
+.sidebar-list {
     display: flex;
     flex-direction: column;
     gap: 1rem;
 }
 
-.sidebar a {
+.sidebar-list a {
     text-decoration: none;
     font-size: 1.1rem;
     color: inherit;
@@ -98,15 +105,16 @@ body {
 
 /* MAIN SECTION */
 
-.page-content {
+.main-content {
     width: 85%;
+    max-width: 800px;
+    padding-top: 2.5rem;
+    margin: 0 auto;
+    min-height: calc(100vh - 55px);
+    
     display: flex;
     flex-direction: column;
     align-items: center;
-    min-height: calc(100vh - 55px);
-    padding-top: 2.5rem;
-    max-width: 800px;
-    margin: 0 auto;
 }
 
 .page-title {
@@ -144,6 +152,15 @@ body {
     width: 100%;
     max-width: 600px;
     margin-bottom: 4rem;
+    table-layout: fixed;
+}
+
+.id-column {
+    width: 20%;
+}
+
+.name-column {
+    width: 80%;
 }
 
 .employee-detail-link {
@@ -160,7 +177,8 @@ body {
     text-align: left;
 }
 
-.employee-table-row {
+.employee-table-data-row,
+.employee-table-header-row {
     border-bottom: 1px solid rgb(120, 120, 120);
 }
 
@@ -203,7 +221,7 @@ body {
     background-color: rgb(85, 85, 85);
 }
 
-/* GENERAL BUTTONS */
+/* BUTTONS */
 
 .form-submit-button {
     padding: 0.5rem 1rem;
@@ -220,6 +238,40 @@ body {
     text-decoration: underline;
 }
 
+.general-button {
+    text-align: center;
+    padding: 0.7rem 1rem;
+    border-radius: 6px;
+    text-decoration: none;
+    color: inherit;
+    background-color: rgb(65, 65, 65);
+    cursor: pointer;
+    font-weight: 350;
+}
+
+.delete-button {
+    text-align: center;
+    padding: 0.7rem 1rem;
+    border-radius: 6px;
+    text-decoration: none;
+    color: rgba(255, 110, 110, 0.7);
+    background-color: rgba(255, 65, 65, 0.15);
+    cursor: pointer;
+    border: 0;
+    font-family: inherit;
+    font-weight: 450;
+}
+
+.general-button:hover {
+    background-color: rgb(85, 85, 85);
+    text-decoration: underline;
+}
+
+.delete-button:hover {
+    background-color: rgba(255, 65, 65, 0.25);
+    text-decoration: underline;
+}
+
 /* INPUT FIELD LABELS */
 
 label {
@@ -233,7 +285,7 @@ b {
     font-weight: 600;
 }
 
-/* EMPLOYEE DETAIL PAGE */
+/* BUTTON CONTAINERS */
 
 .employee-button-container {
     display: flex;
@@ -244,40 +296,14 @@ b {
     width: 100%;
 }
 
-.edit-employee-info-button,
-.edit-employee-avail-button {
-    text-align: center;
-    padding: 0.7rem 1rem;
-    border-radius: 6px;
-    text-decoration: none;
-    color: inherit;
-    background-color: rgb(65, 65, 65);
-    cursor: pointer;
-    font-weight: 350;
-}
-
-.delete-employee-button {
-    text-align: center;
-    padding: 0.7rem 1rem;
-    border-radius: 6px;
-    text-decoration: none;
-    color: rgba(255, 110, 110, 0.7);
-    background-color: rgba(255, 65, 65, 0.15);
-    cursor: pointer;
-    border: 0;
-    font-family: inherit;
-    font-weight: 450;
-}
-
-.edit-employee-info-button:hover,
-.edit-employee-avail-button:hover {
-    background-color: rgb(85, 85, 85);
-    text-decoration: underline;
-}
-
-.delete-employee-button:hover {
-    background-color: rgba(255, 65, 65, 0.25);
-    text-decoration: underline;
+.schedule-button-container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    max-width: 600px;
+    margin-bottom: 3rem;
 }
 
 /* EMPLOYEE AVAILABILITY */
@@ -328,7 +354,7 @@ b {
 
 /* DISPLAY SCHEDULE */
 
-.schedule-type {
+.section-type {
     font-size: 1.5rem;
     align-items: center;
     margin-bottom: 2rem;
@@ -356,53 +382,6 @@ b {
     flex-direction: column;
 }
 
-.schedule-button-container {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
-    max-width: 600px;
-    margin-bottom: 3rem;
-
-}
-
-.download-csv-button,
-.download-pdf-button {
-    text-align: center;
-    padding: 0.7rem 1rem;
-    border-radius: 6px;
-    text-decoration: none;
-    color: inherit;
-    background-color: rgb(65, 65, 65);
-    cursor: pointer;
-    font-weight: 350;
-}
-
-.download-csv-button:hover,
-.download-pdf-button:hover {
-    text-decoration: underline;
-    background-color: rgb(85, 85, 85);
-}
-
-.delete-schedule-button {
-    text-decoration: none;
-    padding: 0.7rem 1rem;
-    border-radius: 6px;
-    background-color: rgba(255, 65, 65, 0.15);
-    color: rgba(255, 110, 110, 0.7);
-    cursor: pointer;
-    text-align: center;
-    border: 0;
-    font-family: inherit;
-    font-weight: 450;
-
-}
-
-.delete-schedule-button:hover {
-    background-color: rgba(255, 65, 65, 0.25);
-    text-decoration: underline;
-}
 /* SCHEDULE LIST */
 
 .schedule-list-container {

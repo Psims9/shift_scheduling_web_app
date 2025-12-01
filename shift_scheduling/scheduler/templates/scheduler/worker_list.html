@@ -8,15 +8,19 @@
     </div>
     {% if worker_list %}
         <table class="employee-table">
+            <colgroup>
+                <col class="id-column">
+                <col class="name-column">
+            </colgroup>
             <thead>
-                <tr class="employee-table-row">
+                <tr class="employee-table-header-row">
                     <th class="employee-table-data"><b>ID</b></th>
                     <th class="employee-table-data"><b>Name</b></th>
                 </tr>
             </thead>
             <tbody>
                 {% for worker in worker_list %}
-                    <tr class="employee-table-row">
+                    <tr class="employee-table-data-row">
                         <td class="employee-table-data">{{worker.id}}</td>
                         <td class="employee-table-data"><a href="{{ worker.get_absolute_url }}" class="employee-detail-link">{{worker}}</a></td>
                     </tr>

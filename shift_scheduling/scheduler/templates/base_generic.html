@@ -18,8 +18,7 @@
     </head>
 
     <body>
-
-        <header class="page-header">
+        <header class="header">
             <button id="menuToggle" class="menu-toggle">
                 ☰
             </button>
@@ -31,7 +30,7 @@
         {% block sidebar %}
             <nav id="sidebar" class="sidebar">
                 <button id="closeMenu" class="menu-close">✕</button>
-                <ul>
+                <ul class="sidebar-list">
                     <li><a href="{% url 'create_schedule' %}">Create schedule</a></li>
                     <li><a href="{% url 'workers' %}">Employees</a></li>
                     <li><a href="{% url 'schedules' %}">Schedules archive</a></li>
@@ -39,7 +38,7 @@
             </nav>
         {% endblock %}
 
-        <main class="page-content">
+        <main class="main-content">
             {% block content %}{% endblock %}
         </main>
 
