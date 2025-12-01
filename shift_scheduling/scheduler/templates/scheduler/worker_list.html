@@ -1,22 +1,22 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-    <h1 class="page-title">Worker list</h1>
-    <div class="employee-list-functions-container">
+    <h1 class="page-title">Employees</h1>
+    <div class="employee-list-button-container">
         <a href="{% url 'worker_create' %}" class="add-new-button">+ Add new</a>
         <input type="text" id="searchInput" placeholder="Search employees..." class="search-bar">
     </div>
     {% if worker_list %}
         <table class="employee-table">
             <thead>
-                <tr class="employee-table-header-row">
-                    <th class="employee-table-header"><b>ID</b></th>
-                    <th class="employee-table-header"><b>Name</b></th>
+                <tr class="employee-table-row">
+                    <th class="employee-table-data"><b>ID</b></th>
+                    <th class="employee-table-data"><b>Name</b></th>
                 </tr>
             </thead>
             <tbody>
                 {% for worker in worker_list %}
-                    <tr class="employee-table-data-row">
+                    <tr class="employee-table-row">
                         <td class="employee-table-data">{{worker.id}}</td>
                         <td class="employee-table-data"><a href="{{ worker.get_absolute_url }}" class="employee-detail-link">{{worker}}</a></td>
                     </tr>

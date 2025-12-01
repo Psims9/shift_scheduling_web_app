@@ -1,13 +1,18 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-    <h1 class="page-title">{{ schedule.schedule_period|date:"F Y" }} Schedule</h1>
+    <h1 class="page-title">{{ schedule.schedule_period|date:"F Y" }}</h1>
+    <div class="schedule-button-container">
+        <a href="{% url 'download_schedule_csv' schedule.id %}" class="download-csv-button">CSV</a>
+        <a href="{% url 'download_schedule_csv' schedule.id %}" class="download-pdf-button">PDF</a>
+        <a href="{% url 'schedule_delete' schedule.id %}" class="delete-schedule-button">Delete</a>
+    </div>
     <h2 class="schedule-type">Per day</h2>
     <table class="schedule-table">
         <thead>
             <tr class="schedule-table-row">
-                <th class="schedule-table-header">Day</th>
-                <th class="schedule-table-header">Assigned Employees</th>
+                <th class="schedule-table-data">Day</th>
+                <th class="schedule-table-data">Assigned Employees</th>
             </tr>
         </thead>
         <tbody>
@@ -26,14 +31,14 @@
         </tbody>
     </table>
 
-    <br><br><br>
+
 
     <h2 class="schedule-type">Per employee</h2>
     <table class="schedule-table">
         <thead>
             <tr class="schedule-table-row">
-                <th class="schedule-table-header">Employee Name</th>
-                <th class="schedule-table-header">Assigned Days</th>
+                <th class="schedule-table-data">Employee Name</th>
+                <th class="schedule-table-data">Assigned Days</th>
             </tr>
         </thead>
         <tbody>
@@ -52,10 +57,26 @@
         </tbody>
     </table>
 
-    <p><strong>Max shifts - min shifts difference:</strong> {{ schedule.schedule_stats.max_shifts_min_shifts }}</p>
-    <p><strong>Max weekend shifts - min weekend shifts difference:</strong> {{ schedule.schedule_stats.max_wknd_shifts_min_wknd_shifts }}</p>
-    <p><strong>Theoretical minimum 1-shift-max interval:</strong> {{ schedule.schedule_stats.theoretical_intervals }} days</p>
-    <p><strong>Interval violations:</strong> {{ schedule.schedule_stats.interval_violations|length }}</p>
+    <h2 class="schedule-type">Schedule stats</h2>
+
+    <table class="schedule-table">
+        <tr class="schedule-table-row">
+            <td class="schedule-table-data">Shift diffence</td>
+            <td class="schedule-table-data">{{ schedule.schedule_stats.max_shifts_min_shifts }}</td>
+        </tr>
+        <tr class="schedule-table-row">
+            <td class="schedule-table-data">Weekend shift difference</td>
+            <td class="schedule-table-data">{{ schedule.schedule_stats.max_wknd_shifts_min_wknd_shifts }}</td>
+        </tr>
+        <tr class="schedule-table-row">
+            <td class="schedule-table-data">1-shift-max interval</td>
+            <td class="schedule-table-data">{{ schedule.schedule_stats.theoretical_intervals }}</td>
+        </tr>
+        <tr class="schedule-table-row">
+            <td class="schedule-table-data">Interval violations</td>
+            <td class="schedule-table-data">{{ schedule.schedule_stats.interval_violations|length }}</td>
+        </tr>
+    </table>
 
     {% if schedule.schedule_stats.interval_violations %}
         <ul>
