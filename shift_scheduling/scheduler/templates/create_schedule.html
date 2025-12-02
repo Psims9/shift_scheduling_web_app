@@ -10,7 +10,9 @@
         
         <button type="submit" class="form-submit-button">Create</button>
     </form>
-    {% if not success %}
-        <p>Time limit exceeded, something's wrong.</p>
+    {% if data_error_msg %}
+        <p>{{data_error_msg}}</p>
+    {% elif solver == 'unsuccessful' %}
+        <p>Solver failed form some reason.</p>
     {% endif %}
 {% endblock %}
