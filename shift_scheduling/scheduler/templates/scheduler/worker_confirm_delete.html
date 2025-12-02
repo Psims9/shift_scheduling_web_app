@@ -1,10 +1,10 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-    <h1>Delete Worker: {{worker}}</h1>
-    <p>Are you sure you want to delete the worker?</p>
+    <h1 class="page-title">{{worker}}</h1>
+    <p style="text-align: center; margin-bottom: 1.5rem; line-height: 1.5;">Are you sure you want to delete {{worker}}?</p>
     <form action="" method="post">
         {% csrf_token %}
-        <input type="submit" value="Yes, delete." />
+        <button type="submit" class="delete-employee-button">Yes, delete</button>
     </form>
 {% endblock %}

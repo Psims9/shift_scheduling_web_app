@@ -1,14 +1,13 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-    <h1>Schedules</h1>
-    <a href="{% url 'create_schedule' %}">Create new schedule</a>
+    <h1 class="page-title">Schedules</h1>
     {% if schedule_list %}
-        <ul>
-            {% for schedule in schedule_list %}
-                <li><a href="{% url 'display_schedule' schedule.id %}">{{schedule}}</a> - <a href="{% url 'schedule_delete' schedule.id %}">Delete</a></li>
-            {% endfor %}
-        </ul>
+    <div class="schedule-list-container">
+        {% for schedule in schedule_list %}
+            <a href="{% url 'display_schedule' schedule.id %}">{{schedule}}</a>
+        {% endfor %}
+    </div>
     {% else %}
         <p>There are no schedules.</p>
     {% endif %}

@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse, Http404
 from .models import Worker, Schedule
 from django.views import generic
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -7,6 +7,7 @@ from django.urls import reverse_lazy
 from .forms import WorkerAvailabilityForm, MonthForm
 import json
 from .create_schedule import create_schedule
+import csv
 
 def index(request):
     num_workers = Worker.objects.all().count()
@@ -15,14 +16,14 @@ def index(request):
 
 class WorkerListView(generic.ListView):
     model = Worker
-    paginate_by = 10
+    
 
 class WorkerDetailView(generic.DetailView):
     model = Worker
 
 class WorkerCreateView(CreateView):
     model = Worker
-    fields = '__all__'
+    fields = ['first_name', 'last_name']
 
 class WorkerUpdateView(UpdateView):
     model = Worker
@@ -67,8 +68,9 @@ class WorkerDeleteView(DeleteView):
 
 def CreateSchedule(request):
     success = True
-    
+
     if request.method == 'POST':
+
         form = MonthForm(request.POST)
         if form.is_valid():
             schedule_period = form.cleaned_data['schedule_period']
@@ -87,6 +89,7 @@ def CreateSchedule(request):
                     per_employee_schedule=per_employee_schedule,
                     schedule_stats = schedule_stats,
                 )
+
                 return redirect('display_schedule', pk=new_schedule.pk)
 
     else:
@@ -117,3 +120,30 @@ class ScheduleDeleteView(generic.DeleteView):
             return HttpResponseRedirect(self.success_url)
         except:
             return HttpResponseRedirect('schedule_delete', kwargs={'pk': self.object.pk})
+        
+
+def download_schedule_csv(request, pk):
+    schedule = get_object_or_404(Schedule, pk=pk)
+    per_day = schedule.per_day_schedule # list of dictionaries
+
+    response = HttpResponse(content_type='text/csv; charset=utf-8')
+    filename = f"schedule_{schedule.schedule_period.strftime('%Y-%m')}.csv"
+    response['Content-Disposition'] = f'attachment; filename="{filename}"'
+    response.write('\ufeff')
+
+    writer = csv.writer(response, delimiter=';')
+
+    writer.writerow(['date', 'id', 'name'])
+    
+    for day in per_day:
+        date = day.get('iso_date', '')
+        employees = day.get('daily_employees', []) or [] # list of dictionaries
+
+        for employee in employees:
+            employee_name = employee.get('name','')
+            employee_id = employee.get('id','')
+
+            writer.writerow([date, employee_id, employee_name])
+    
+    return response
+            

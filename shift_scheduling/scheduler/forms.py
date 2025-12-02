@@ -4,6 +4,7 @@ import json
 
 class WorkerAvailabilityForm(forms.ModelForm):
     unavailable_dates_json = forms.CharField(widget=forms.HiddenInput(), required=False)
+    
 
     class Meta:
         model = Worker
@@ -44,7 +45,8 @@ class WorkerAvailabilityForm(forms.ModelForm):
 
 class MonthForm(forms.Form):
     schedule_period = forms.DateField(
-        widget=forms.DateInput(attrs={'type': 'month'}),
+        label="Select month",
+        widget=forms.DateInput(attrs={'type': 'month', 'class': 'form-input-field'}),
         input_formats=['%Y-%m'],
         help_text='Choose scheduling period'
     )
