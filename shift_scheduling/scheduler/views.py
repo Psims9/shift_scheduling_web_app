@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import HttpResponseRedirect, HttpResponse, Http404
+from django.http import HttpResponseRedirect, HttpResponse
 from .models import Worker, Schedule
 from django.views import generic
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -7,6 +7,7 @@ from django.urls import reverse_lazy
 from .forms import WorkerAvailabilityForm, MonthForm
 import json
 from .create_schedule import create_schedule
+from .data_validation import data_validation
 import csv
 
 def index(request):
@@ -67,37 +68,52 @@ class WorkerDeleteView(DeleteView):
             return HttpResponseRedirect('worker_delete', kwargs={'pk': self.object.pk})
 
 def CreateSchedule(request):
-    success = True
+    data_error_msg = ''
+    solver = 'successful'
+    
 
     if request.method == 'POST':
+        # if it is a post request, first run some first-line checks on the DB
+        # for obvious things and edge cases which might cause create_schedule to fail,
+        # such as not enough workers, too many constraints etc.
 
         form = MonthForm(request.POST)
+
         if form.is_valid():
-            schedule_period = form.cleaned_data['schedule_period']
+
             employees = Worker.objects.all()
+            schedule_period = form.cleaned_data['schedule_period']
 
-            result = create_schedule(schedule_period, employees)
+            test_results = data_validation(employees, schedule_period)
 
-            if result == None:
-                success = False
-                
+            if test_results['code'] == 0:
+
+                result = create_schedule(schedule_period, employees)
+
+                if result == None:
+                    solver = 'unsuccessful'
+                    
+                else:
+                    per_day_schedule, per_employee_schedule, schedule_stats = result
+                    new_schedule = Schedule.objects.create(
+                        schedule_period=schedule_period,
+                        per_day_schedule=per_day_schedule,
+                        per_employee_schedule=per_employee_schedule,
+                        schedule_stats = schedule_stats,
+                    )
+
+                    return redirect('display_schedule', pk=new_schedule.pk)
+            
             else:
-                per_day_schedule, per_employee_schedule, schedule_stats = result
-                new_schedule = Schedule.objects.create(
-                    schedule_period=schedule_period,
-                    per_day_schedule=per_day_schedule,
-                    per_employee_schedule=per_employee_schedule,
-                    schedule_stats = schedule_stats,
-                )
-
-                return redirect('display_schedule', pk=new_schedule.pk)
-
+                data_error_msg = test_results['msg']
+            
     else:
         form = MonthForm()
 
     context = {
         'form': form,
-        'success': success
+        'solver': solver,
+        'data_error_msg': data_error_msg
     }
     
     return render(request, 'create_schedule.html', context=context)

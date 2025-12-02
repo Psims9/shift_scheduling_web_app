@@ -43,15 +43,16 @@ def create_schedule(schedule_period: datetime.date, employees):
         model.add(employee_shift_count[e.id] == sum(decision_vars[e.id][day] for day in range(1, num_days + 1)))
         model.add(employee_wknd_shift_count[e.id] == sum(decision_vars[e.id][day] for day in weekends))
 
-        for interval_start in range(1, num_days - shift_interval + 2):
-            interval_end = interval_start + shift_interval - 1
+        if shift_interval >= 2:
+            for interval_start in range(1, num_days - shift_interval + 2):
+                interval_end = interval_start + shift_interval - 1
 
-            violation = model.new_bool_var(f'interval_violation_for_{e.id}_from_{interval_start}_to_{interval_end}')
-            
-            model.add(sum(decision_vars[e.id][day] for day in range(interval_start, interval_end + 1)) >= 2).only_enforce_if(violation)
-            model.add(sum(decision_vars[e.id][day] for day in range(interval_start, interval_end + 1)) < 2).only_enforce_if(violation.Not())
+                violation = model.new_bool_var(f'interval_violation_for_{e.id}_from_{interval_start}_to_{interval_end}')
+                
+                model.add(sum(decision_vars[e.id][day] for day in range(interval_start, interval_end + 1)) >= 2).only_enforce_if(violation)
+                model.add(sum(decision_vars[e.id][day] for day in range(interval_start, interval_end + 1)) < 2).only_enforce_if(violation.Not())
 
-            shift_interval_violations.append(violation)
+                shift_interval_violations.append(violation)
         
     for day in range(1, num_days + 1):
         model.add(sum(decision_vars[e.id][day] for e in employees) == 2)
@@ -76,8 +77,9 @@ def create_schedule(schedule_period: datetime.date, employees):
     solver.solve(model)
     model.add(obj_2 == int(solver.objective_value))
 
-    model.minimize(obj_3)
-    solver.solve(model)
+    if shift_interval_violations:
+        model.minimize(obj_3)
+        solver.solve(model)
     
     status = solver.Solve(model)
 
