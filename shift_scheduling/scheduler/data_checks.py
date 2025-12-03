@@ -10,9 +10,10 @@ from collections import defaultdict
 # Then go through each day and check that the number of available
 # employees is at least 2.
 
-def data_validation(employees, schedule_period):
+def data_checks(employees, schedule_period):
 
     employees_num = employees.count()
+    
 
     # Test 1: are there enough employees in the db to begin with
     if employees_num < 2:
@@ -55,5 +56,7 @@ def data_validation(employees, schedule_period):
             return {'code': 2, 'msg': f'not enough available employees on {current.isoformat()}'}
         
         current += timedelta(days=1)
+
+    
 
     return {'code': 0, 'msg': 'tests_succesfull'}

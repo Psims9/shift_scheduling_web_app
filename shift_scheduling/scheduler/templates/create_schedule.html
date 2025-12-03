@@ -5,9 +5,13 @@
     <form action="" method="post" class="month-selection-form">
         {% csrf_token %}
 
-        {{ form.schedule_period.label_tag }}
-        {{ form.schedule_period }}
-        
+        <div style="margin-bottom: 1rem; font-size: 1.2rem;">
+            {{ form.schedule_period.label_tag }}
+        </div>
+
+        <div style="margin-bottom: 1.5rem;">
+            {{ form.schedule_period }}
+        </div>
         <button type="submit" class="form-submit-button">Create</button>
     </form>
     {% if data_error_msg %}

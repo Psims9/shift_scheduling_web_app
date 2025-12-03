@@ -76,6 +76,14 @@
             <td class="schedule-table-data">Interval violations</td>
             <td class="schedule-table-data">{{ schedule.schedule_stats.interval_violations|length }}</td>
         </tr>
+        <tr class="schedule-table-row">
+            <td class="schedule-table-data">Max shift violations:</td>
+            <td class="schedule-table-data">{{schedule.schedule_stats.shift_violations|length}}</td>
+        </tr>
+        <tr class="schedule-table-row">
+            <td class="schedule-table-data">Max weekend shift violations:</td>
+            <td class="schedule-table-data">{{schedule.schedule_stats.wknd_shift_violations|length}}</td>
+        </tr>
     </table>
 
     {% if schedule.schedule_stats.interval_violations %}

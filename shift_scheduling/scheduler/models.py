@@ -6,7 +6,10 @@ from django.urls import reverse
 class Worker(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
+
     unavailable_dates = models.JSONField(default=list, blank=True)
+    assign_least_shifts = models.BooleanField(default=False)
+    assign_least_weekends = models.BooleanField(default=False)
 
     def is_available_on(self, date_obj):
         """
@@ -19,7 +22,7 @@ class Worker(models.Model):
         ordering = ['last_name', 'first_name']
     
     def get_absolute_url(self):
-        return reverse('detail_worker', args=[str(self.id)])
+        return reverse('worker_data', args=[str(self.id)])
     
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
@@ -38,4 +41,4 @@ class Schedule(models.Model):
         return self.schedule_period.strftime("%B %Y")
     
     class Meta:
-        ordering = ['schedule_period']
+        ordering = ['-schedule_period']

@@ -47,4 +47,9 @@ table {
 	border-spacing: 0;
 }
 
+label {
+    display: block;   /* now the label behaves like a block element */
+    line-height: 1;   /* prevents extra height from line spacing */
+}
+
 * { box-sizing: border-box; }

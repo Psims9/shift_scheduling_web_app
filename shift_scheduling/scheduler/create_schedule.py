@@ -9,6 +9,8 @@ def create_schedule(schedule_period: datetime.date, employees):
     num_days = calendar.monthrange(schedule_period.year, schedule_period.month)[1]
     shift_interval = math.floor(num_days/math.ceil((num_days*2)/employees.count()))
     shift_interval_violations = []
+    max_shift_violations = []
+    max_wknd_shift_violations = []
 
     month_cal = calendar.monthcalendar(schedule_period.year, schedule_period.month)
     weekends = []
@@ -35,13 +37,26 @@ def create_schedule(schedule_period: datetime.date, employees):
 
         for day in range(1, num_days + 1):
             decision_vars[e.id][day] = model.new_bool_var(f'empl_{e.id}_on_{day}')
+
             cur_date = datetime.date(schedule_period.year, schedule_period.month, day).strftime("%Y-%m-%d") # a date string in 'YYY-MM-DD' format, same as the e.unavailable_dates list elements
 
             if cur_date in e.unavailable_dates:
                 model.add(decision_vars[e.id][day] == 0)
                     
         model.add(employee_shift_count[e.id] == sum(decision_vars[e.id][day] for day in range(1, num_days + 1)))
+        if e.assign_least_shifts:
+            violation = model.new_bool_var(f'max_shifts_violation_for_{e.id}')
+            model.add(employee_shift_count[e.id] == max_shifts).only_enforce_if(violation)
+            model.add(employee_shift_count[e.id] < max_shifts).only_enforce_if(violation.Not())
+            max_shift_violations.append(violation)
+
         model.add(employee_wknd_shift_count[e.id] == sum(decision_vars[e.id][day] for day in weekends))
+        if e.assign_least_weekends:
+            violation = model.new_bool_var(f'max_wknd_shifts_violation_for_{e.id}')
+            model.add(employee_wknd_shift_count[e.id] == max_wknd_shifts).only_enforce_if(violation)
+            model.add(employee_wknd_shift_count[e.id] < max_wknd_shifts).only_enforce_if(violation.Not())
+            max_wknd_shift_violations.append(violation)
+
 
         if shift_interval >= 2:
             for interval_start in range(1, num_days - shift_interval + 2):
@@ -64,7 +79,9 @@ def create_schedule(schedule_period: datetime.date, employees):
     
     obj_1 = max_shifts - min_shifts
     obj_2 = max_wknd_shifts - min_wknd_shifts
-    obj_3 = sum(shift_interval_violations)
+    obj_3 = sum(max_shift_violations)
+    obj_4 = sum(max_wknd_shift_violations)
+    obj_5 = sum(shift_interval_violations)
 
     solver = cp_model.CpSolver()
     solver.parameters.max_time_in_seconds = 5
@@ -77,8 +94,16 @@ def create_schedule(schedule_period: datetime.date, employees):
     solver.solve(model)
     model.add(obj_2 == int(solver.objective_value))
 
+    model.minimize(obj_3)
+    solver.solve(model)
+    model.add(obj_3 == int(solver.objective_value))
+
+    model.minimize(obj_4)
+    solver.solve(model)
+    model.add(obj_4 == int(solver.objective_value))
+
     if shift_interval_violations:
-        model.minimize(obj_3)
+        model.minimize(obj_5)
         solver.solve(model)
     
     status = solver.Solve(model)
@@ -111,12 +136,24 @@ def create_schedule(schedule_period: datetime.date, employees):
     interval_violations = []
     for i in range(len(shift_interval_violations)):
         if solver.value(shift_interval_violations[i]) == 1:
-            interval_violations.append(shift_interval_violations[i].Name())        
+            interval_violations.append(shift_interval_violations[i].Name())
+    
+    shift_violations = []
+    for i in range(len(max_shift_violations)):
+        if solver.value(max_shift_violations[i]) == 1:
+            shift_violations.append(max_shift_violations[i].Name())
+
+    wknd_shift_violations = []
+    for i in range(len(max_wknd_shift_violations)):
+        if solver.value(max_wknd_shift_violations[i]) == 1:
+            wknd_shift_violations.append(max_wknd_shift_violations[i].Name())
     
     schedule_stats = {
         'max_shifts_min_shifts': solver.value(obj_1),
         'max_wknd_shifts_min_wknd_shifts': solver.value(obj_2),
         'interval_violations': interval_violations,
+        'shift_violations': shift_violations,
+        'wknd_shift_violations': wknd_shift_violations,
         'theoretical_intervals': solver.value(shift_interval),
     }
             
