@@ -4,10 +4,10 @@ from .models import Worker, Schedule
 from django.views import generic
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
-from .forms import WorkerAvailabilityForm, MonthForm
+from .forms import WorkerDataForm, MonthForm
 import json
 from .create_schedule import create_schedule
-from .data_validation import data_validation
+from .data_checks import data_checks
 import csv
 
 def index(request):
@@ -25,12 +25,13 @@ class WorkerDetailView(generic.DetailView):
 class WorkerCreateView(CreateView):
     model = Worker
     fields = ['first_name', 'last_name']
+    success_url = reverse_lazy('workers')
 
 class WorkerUpdateView(UpdateView):
     model = Worker
     fields = ['first_name', 'last_name']
 
-def edit_worker_availability(request, pk):
+def worker_data(request, pk):
 
     worker = get_object_or_404(Worker, pk=pk)
 
@@ -38,13 +39,14 @@ def edit_worker_availability(request, pk):
 
         # When you create a ModelForm, it can be bound to an existing model instance.
         # If instance is not provided, the form will create a new object when saved.
-        form = WorkerAvailabilityForm(request.POST, instance=worker)
+
+        form = WorkerDataForm(request.POST, instance=worker)
         if form.is_valid():
             form.save()
             return redirect('workers')
         
     else:
-        form = WorkerAvailabilityForm(instance=worker)
+        form = WorkerDataForm(instance=worker)
     
     initial_dates_json = json.dumps(worker.unavailable_dates or [])
     context = {
@@ -53,7 +55,7 @@ def edit_worker_availability(request, pk):
         'initial_dates_json': initial_dates_json
     }
 
-    return render(request, 'edit_worker_availability.html', context=context)
+    return render(request, 'worker_data.html', context=context)
             
 
 class WorkerDeleteView(DeleteView):
@@ -84,7 +86,7 @@ def CreateSchedule(request):
             employees = Worker.objects.all()
             schedule_period = form.cleaned_data['schedule_period']
 
-            test_results = data_validation(employees, schedule_period)
+            test_results = data_checks(employees, schedule_period)
 
             if test_results['code'] == 0:
 

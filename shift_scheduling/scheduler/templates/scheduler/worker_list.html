@@ -2,12 +2,12 @@
 
 {% block content %}
     <h1 class="page-title">Employees</h1>
-    <div class="employee-list-button-container">
+    <div class="employee-list-button-container" style="margin-bottom: 2rem;">
         <a href="{% url 'worker_create' %}" class="add-new-button">+ Add new</a>
         <input type="text" id="searchInput" placeholder="Search employees..." class="search-bar">
     </div>
     {% if worker_list %}
-        <table class="employee-table">
+        <table class="employee-table" style="margin-bottom: 4rem;">
             <colgroup>
                 <col class="id-column">
                 <col class="name-column">

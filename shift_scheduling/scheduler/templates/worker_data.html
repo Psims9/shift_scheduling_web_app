@@ -1,0 +1,68 @@
+{% extends "base_generic.html" %}
+
+{% block style %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+{% endblock %}
+
+{% block content %}
+    <h1 class="page-title">{{worker}}</h1>
+    <form method="post" class="worker-data-form" style="margin-bottom: 1rem;">
+        {% csrf_token %}
+        {{form.unavailable_dates}} <!-- hidden -->
+
+        <div class="data-fields-container" style="margin-bottom: 2.5rem;">
+            <div class="data-field-block">
+                <label for="unavailablePicker">Unavaiable dates</label>
+                <input id="unavailablePicker" placeholder="Pick unavailable dates"/> <!-- visible -->
+            </div>
+
+            <div class="data-field-inline">
+                {{form.assign_least_shifts}}                
+                {{form.assign_least_shifts.label}}
+            </div>
+
+            <div class="data-field-inline">
+                {{form.assign_least_weekends}}                
+                {{form.assign_least_weekends.label}}
+            </div>
+        </div>
+
+        <div class="data-fields-container" style="margin-bottom: 2rem;">
+            <div class="data-field-block">
+                {{form.first_name.label}}
+                {{form.first_name}}
+            </div>
+
+            <div class="data-field-block">
+                {{form.last_name.label}}
+                {{form.last_name}}
+            </div>
+        </div>
+
+        <button type="submit" class="form-submit-button" style="align-self: start;">Save</button>
+    </form>
+
+    <button class="delete-button" style="align-self: start;">Delete</button>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        const initial = {{ initial_dates_json|safe }}; 
+        
+        const fp = flatpickr("#unavailablePicker", {
+            mode: "multiple",
+            dateFormat: "Y-m-d",
+            defaultDate: initial
+        });
+
+        const hidden = document.querySelector('input[name="unavailable_dates"]');
+
+        function syncHidden() {
+            const arr = fp.selectedDates.map(d => fp.formatDate(d, "Y-m-d"));
+            hidden.value = JSON.stringify(arr);
+            }
+        
+        fp.config.onChange.push(syncHidden);
+        syncHidden();
+        document.querySelector('form').addEventListener('submit', syncHidden);
+    </script>
+{% endblock %}
