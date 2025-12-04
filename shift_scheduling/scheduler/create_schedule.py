@@ -8,6 +8,7 @@ def create_schedule(schedule_period: datetime.date, employees):
 
     num_days = calendar.monthrange(schedule_period.year, schedule_period.month)[1]
     shift_interval = math.floor(num_days/math.ceil((num_days*2)/employees.count()))
+    shift_diff_violations = []
     shift_interval_violations = []
     max_shift_violations = []
     max_wknd_shift_violations = []
@@ -44,6 +45,12 @@ def create_schedule(schedule_period: datetime.date, employees):
                 model.add(decision_vars[e.id][day] == 0)
                     
         model.add(employee_shift_count[e.id] == sum(decision_vars[e.id][day] for day in range(1, num_days + 1)))
+        
+        violation = model.new_bool_var(f'{e.id}_shift_diff_more_than_1')
+        model.add(max_shifts - employee_shift_count[e.id] > 1).only_enforce_if(violation)
+        model.add(max_shifts - employee_shift_count[e.id] <= 1).only_enforce_if(violation.Not())
+        shift_diff_violations.append(violation)
+
         if e.assign_least_shifts:
             violation = model.new_bool_var(f'max_shifts_violation_for_{e.id}')
             model.add(employee_shift_count[e.id] == max_shifts).only_enforce_if(violation)
@@ -79,9 +86,10 @@ def create_schedule(schedule_period: datetime.date, employees):
     
     obj_1 = max_shifts - min_shifts
     obj_2 = max_wknd_shifts - min_wknd_shifts
-    obj_3 = sum(max_shift_violations)
-    obj_4 = sum(max_wknd_shift_violations)
-    obj_5 = sum(shift_interval_violations)
+    obj_3 = sum(shift_diff_violations)
+    obj_4 = sum(max_shift_violations)
+    obj_5 = sum(max_wknd_shift_violations)
+    obj_6 = sum(shift_interval_violations)
 
     solver = cp_model.CpSolver()
     solver.parameters.max_time_in_seconds = 5
@@ -102,8 +110,12 @@ def create_schedule(schedule_period: datetime.date, employees):
     solver.solve(model)
     model.add(obj_4 == int(solver.objective_value))
 
+    model.minimize(obj_5)
+    solver.solve(model)
+    model.add(obj_5 == int(solver.objective_value))    
+
     if shift_interval_violations:
-        model.minimize(obj_5)
+        model.minimize(obj_6)
         solver.solve(model)
     
     status = solver.Solve(model)
@@ -147,6 +159,7 @@ def create_schedule(schedule_period: datetime.date, employees):
     for i in range(len(max_wknd_shift_violations)):
         if solver.value(max_wknd_shift_violations[i]) == 1:
             wknd_shift_violations.append(max_wknd_shift_violations[i].Name())
+
     
     schedule_stats = {
         'max_shifts_min_shifts': solver.value(obj_1),
