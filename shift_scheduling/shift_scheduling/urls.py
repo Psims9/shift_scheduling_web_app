@@ -19,9 +19,13 @@ from django.urls import path, include
 from django.views.generic import RedirectView
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib.auth import views as auth_views
+from scheduler.forms import StyledAuthenticationForm
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('scheduler', include('scheduler.urls')),
+    path('scheduler/', include('scheduler.urls')),
     path('', RedirectView.as_view(url='scheduler/', permanent=True)),
+    path('accounts/login/', auth_views.LoginView.as_view(authentication_form=StyledAuthenticationForm), name='login'),
+    path('accounts/logout/', auth_views.LogoutView.as_view(), name='logout')
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

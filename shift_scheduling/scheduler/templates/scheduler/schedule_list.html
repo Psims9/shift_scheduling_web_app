@@ -2,11 +2,11 @@
 
 {% block content %}
     <h1 class="page-title">Schedules</h1>
-    {% if schedule_list %}
     <div class="schedule-list-button-container" style="margin-bottom: 2rem; border-bottom: 1px solid rgb(120, 120, 120); padding-bottom: 1rem;">
         <a href="{% url 'create_schedule' %}" class="add-new-button">+ New</a>
         <input type="text" id="searchInput" placeholder="Search schedules..." class="search-bar">
     </div>
+    {% if schedule_list %}
     <div class="schedule-list-container">
         {% for schedule in schedule_list %}
             <a href="{% url 'display_schedule' schedule.id %}">{{schedule}}</a>

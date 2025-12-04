@@ -1,3 +1,5 @@
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponseRedirect, HttpResponse
 from .models import Worker, Schedule
@@ -10,27 +12,36 @@ from .create_schedule import create_schedule
 from .data_checks import data_checks
 import csv
 
+@login_required
 def index(request):
     num_workers = Worker.objects.all().count()
     context = {'num_workers': num_workers}
     return render(request, 'base_generic.html', context=context)
 
-class WorkerListView(generic.ListView):
+class WorkerListView(LoginRequiredMixin, generic.ListView):
     model = Worker
     
 
-class WorkerDetailView(generic.DetailView):
+class WorkerDetailView(LoginRequiredMixin, generic.DetailView):
     model = Worker
 
-class WorkerCreateView(CreateView):
+class WorkerCreateView(LoginRequiredMixin, CreateView):
     model = Worker
     fields = ['first_name', 'last_name']
     success_url = reverse_lazy('workers')
 
-class WorkerUpdateView(UpdateView):
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        # Add classes to fields
+        for field_name in form.fields:
+            form.fields[field_name].widget.attrs.update({'class': 'form-input-field'})
+        return form
+
+class WorkerUpdateView(LoginRequiredMixin, UpdateView):
     model = Worker
     fields = ['first_name', 'last_name']
 
+@login_required
 def worker_data(request, pk):
 
     worker = get_object_or_404(Worker, pk=pk)
@@ -58,7 +69,7 @@ def worker_data(request, pk):
     return render(request, 'worker_data.html', context=context)
             
 
-class WorkerDeleteView(DeleteView):
+class WorkerDeleteView(LoginRequiredMixin, DeleteView):
     model = Worker
     success_url = reverse_lazy('workers')
 
@@ -69,6 +80,7 @@ class WorkerDeleteView(DeleteView):
         except:
             return HttpResponseRedirect('worker_delete', kwargs={'pk': self.object.pk})
 
+@login_required
 def CreateSchedule(request):
     data_error_msg = ''
     solver = 'successful'
@@ -120,15 +132,16 @@ def CreateSchedule(request):
     
     return render(request, 'create_schedule.html', context=context)
 
+@login_required
 def DisplaySchedule(request, pk):
     schedule = Schedule.objects.get(pk=pk)
     return render(request, 'display_schedule.html', context={'schedule': schedule})
 
-class ScheduleListView(generic.ListView):
+class ScheduleListView(LoginRequiredMixin, generic.ListView):
     model = Schedule
     paginate_by: 10
 
-class ScheduleDeleteView(generic.DeleteView):
+class ScheduleDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Schedule
     success_url = reverse_lazy('schedules')
 
@@ -140,6 +153,7 @@ class ScheduleDeleteView(generic.DeleteView):
             return HttpResponseRedirect('schedule_delete', kwargs={'pk': self.object.pk})
         
 
+@login_required
 def download_schedule_csv(request, pk):
     schedule = get_object_or_404(Schedule, pk=pk)
     per_day = schedule.per_day_schedule # list of dictionaries
