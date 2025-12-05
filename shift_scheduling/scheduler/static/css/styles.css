@@ -222,7 +222,7 @@ body {
 
 .form-submit-button {
     padding: 0.5rem 0;
-    width: 7rem;
+    width: 5rem;
     border-radius: 6px;
     border: 0;
     background-color: white;
@@ -250,7 +250,7 @@ body {
 .delete-button {
     text-align: center;
     padding: 0.5rem 0;
-    width: 7rem;
+    width: 5rem;
     border-radius: 6px;
     text-decoration: none;
     color: rgba(255, 146, 146, 0.7);
@@ -347,14 +347,6 @@ b {
 .employee-edit-table td,
 .employee-edit-table th {
     padding: 0.6rem 0.4rem;
-}
-
-.employee-edit-table input {
-    padding: 0.4rem;
-    background-color: rgb(65, 65, 65);
-    color: white;
-    border-radius: 6px;
-    border: 0;
 }
 
 .employee-edit-form {

@@ -1,5 +1,6 @@
 from django import forms
 from .models import Worker
+from django.contrib.auth.forms import AuthenticationForm
 
 class WorkerDataForm(forms.ModelForm):
 
@@ -29,3 +30,11 @@ class MonthForm(forms.Form):
         input_formats=['%Y-%m'],
         help_text='Choose scheduling period'
     )
+
+
+class StyledAuthenticationForm(AuthenticationForm):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['username'].widget.attrs.update({'class': 'form-input-field'})
+        self.fields['password'].widget.attrs.update({'class': 'form-input-field'})

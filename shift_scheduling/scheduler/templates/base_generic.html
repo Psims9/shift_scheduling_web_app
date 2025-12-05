@@ -25,20 +25,31 @@
                     <li><a href="{% url 'create_schedule' %}">Create schedule</a></li>
                     <li><a href="{% url 'workers' %}">Employees</a></li>
                     <li><a href="{% url 'schedules' %}">Schedules archive</a></li>
+                    {% if user.is_authenticated %}
+                        <li>User: {{ user.get_username }}</li>
+                        <li>
+                        <form id="logout-form" method="post" action="{% url 'logout' %}">
+                            {% csrf_token %}
+                            <button type="submit">Logout</button>
+                        </form>
+                        </li>
+                    {% endif %}
                 </ul>
             </nav>
         {% endblock %}
         
         <div class="sidebar-overlay" id="sidebar-overlay"></div>
-
-        <header class="header">
-            <button id="menuToggle" class="menu-toggle">
-                ☰
-            </button>
-            <h1 class="site-title">
-                Shift Scheduling App
-            </h1>
-        </header>
+        
+        {% block header %}
+            <header class="header">
+                <button id="menuToggle" class="menu-toggle">
+                    ☰
+                </button>
+                <h1 class="site-title">
+                    Shift Scheduling App
+                </h1>
+            </header>
+        {% endblock %}
 
         <main class="main-content">
             {% block content %}{% endblock %}
