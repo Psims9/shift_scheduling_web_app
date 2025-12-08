@@ -7,22 +7,22 @@
         <input type="text" id="searchInput" placeholder="Search employees..." class="search-bar">
     </div>
     {% if worker_list %}
-        <table class="employee-table" style="margin-bottom: 4rem;">
+        <table class="inst-table" style="margin-bottom: 4rem;">
             <colgroup>
-                <col class="id-column">
-                <col class="name-column">
+                <col class="inst-id-column">
+                <col class="inst-name-column">
             </colgroup>
             <thead>
-                <tr class="employee-table-header-row">
-                    <th class="employee-table-data"><b>ID</b></th>
-                    <th class="employee-table-data"><b>Name</b></th>
+                <tr class="inst-table-header-row">
+                    <th class="inst-table-data"><b>ID</b></th>
+                    <th class="inst-table-data"><b>Name</b></th>
                 </tr>
             </thead>
             <tbody>
                 {% for worker in worker_list %}
-                    <tr class="employee-table-data-row">
-                        <td class="employee-table-data">{{worker.id}}</td>
-                        <td class="employee-table-data"><a href="{{ worker.get_absolute_url }}" class="employee-detail-link">{{worker}}</a></td>
+                    <tr class="inst-table-data-row">
+                        <td class="inst-table-data">{{worker.id}}</td>
+                        <td class="inst-table-data"><a href="{{ worker.get_absolute_url }}" class="inst-detail-link">{{worker}}</a></td>
                     </tr>
                 {% endfor %}
             </tbody>
@@ -33,13 +33,13 @@
 
     <script>
         const searchInput = document.getElementById('searchInput');
-        const tableRows = document.querySelectorAll('.employee-table-data-row');
+        const tableRows = document.querySelectorAll('.inst-table-data-row');
 
         searchInput.addEventListener('input', function (e) {
             const query = e.target.value.toLowerCase();
 
             tableRows.forEach(row => {
-                const nameCell = row.querySelector('.employee-table-data:nth-child(2)');
+                const nameCell = row.querySelector('.inst-table-data:nth-child(2)');
                 const nameText = nameCell.textContent.toLowerCase();
 
                 // Show/hide row based on match

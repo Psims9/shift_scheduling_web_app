@@ -35,7 +35,7 @@ class Schedule(models.Model):
     schedule_stats = models.JSONField(default=list)
 
     def get_absolute_url(self):
-        return reverse('detail_schedule', args=[str(self.id)])
+        return reverse('display_schedule', args=[str(self.id)])
 
     def __str__(self):
         return self.schedule_period.strftime("%B %Y")

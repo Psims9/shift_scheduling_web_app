@@ -7,12 +7,48 @@
         <input type="text" id="searchInput" placeholder="Search schedules..." class="search-bar">
     </div>
     {% if schedule_list %}
-    <div class="schedule-list-container">
-        {% for schedule in schedule_list %}
-            <a href="{% url 'display_schedule' schedule.id %}">{{schedule}}</a>
-        {% endfor %}
-    </div>
+        <table class="inst-table">
+            <colgroup>
+                <col class="inst-id-column">
+                <col class="inst-name-column">
+            </colgroup>
+            <thead>
+                <tr class="inst-table-header-row">
+                    <th class="inst-table-data"><b>ID</b></th>
+                    <th class="inst-table-data"><b>Schedule Period</b></th>
+                </tr>
+                <tbody>
+                    {% for schedule in schedule_list %}
+                        <tr class="inst-table-data-row">
+                            <td class="inst-table-data">{{schedule.id}}</td>
+                            <td class="inst-table-data"><a href="{{ schedule.get_absolute_url }}" class="inst-detail-link">{{schedule}}</a></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </thead>
+        </table>
     {% else %}
         <p>There are no schedules.</p>
     {% endif %}
+
+    <script>
+        const searchInput = document.getElementById('searchInput');
+        const tableRows = document.querySelectorAll('.inst-table-data-row');
+
+        searchInput.addEventListener('input', function (e) {
+            const query = e.target.value.toLowerCase();
+
+            tableRows.forEach(row => {
+                const nameCell = row.querySelector('.inst-table-data:nth-child(2)');
+                const nameText = nameCell.textContent.toLowerCase();
+
+                // Show/hide row based on match
+                if (nameText.includes(query)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+    </script>
 {% endblock %}

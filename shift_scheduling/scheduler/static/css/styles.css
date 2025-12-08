@@ -63,7 +63,7 @@ body {
     z-index: 50;
 
     height: 100vh;
-    width: 270px;
+    width: 235px;
     max-width: 85vw;
 
     background-color: rgb(25, 25, 25);
@@ -110,6 +110,7 @@ body {
 }
 
 .sidebar-user {
+    margin-top: auto;
     display: flex;
     flex-direction: column;
     gap: 0.2rem;
@@ -166,36 +167,36 @@ body {
     color: rgb(200, 200, 200);
 }
 
-.employee-table {
+.inst-table {
     width: 100%;
     max-width: 600px;
     table-layout: fixed;
 }
 
-.id-column {
+.inst-id-column {
     width: 20%;
 }
 
-.name-column {
+.inst-name-column {
     width: 80%;
 }
 
-.employee-detail-link {
+.inst-detail-link {
     color: inherit;
     text-decoration: none;
 }
 
-.employee-detail-link:hover {
+.inst-detail-link:hover {
     text-decoration: underline;
 }
 
-.employee-table-data {
+.inst-table-data {
     padding: 0.7rem;
     text-align: left;
 }
 
-.employee-table-data-row,
-.employee-table-header-row {
+.inst-table-data-row,
+.inst-table-header-row {
     border-bottom: 1px solid rgb(120, 120, 120);
 }
 
@@ -431,6 +432,8 @@ b {
     gap: 1rem;
     justify-content: space-between;
 }
+
+
 
 /* EMPLOYEE DETAIL */
 
