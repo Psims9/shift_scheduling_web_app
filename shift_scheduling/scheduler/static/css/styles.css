@@ -161,6 +161,7 @@ body {
     cursor: text;
     color: white;
     padding: 0.5rem;
+    flex: 1;
 }
 
 .search-bar::placeholder {
@@ -169,8 +170,12 @@ body {
 
 .inst-table {
     width: 100%;
-    max-width: 600px;
+    
     table-layout: fixed;
+}
+
+.inst-checkbox-column {
+    width: 2rem;
 }
 
 .inst-id-column {
@@ -191,7 +196,7 @@ body {
 }
 
 .inst-table-data {
-    padding: 0.7rem;
+    padding: 0.7rem 0;
     text-align: left;
 }
 
@@ -200,17 +205,10 @@ body {
     border-bottom: 1px solid rgb(120, 120, 120);
 }
 
-.employee-list-button-container {
-    width: 100%;
-    display: flex;
-    gap: 1rem;
-    max-width: 600px;
-    justify-content: space-between;
-}
-
 .add-new-button {
+    align-self: flex-start;
     text-decoration: none;
-    padding: 0.7rem;
+    padding: 0.5rem 0.7rem;
     border-radius: 6px;
     background-color: #047857ac;
     color: #6ee7b7;
@@ -240,7 +238,7 @@ body {
 /* BUTTONS */
 
 .form-submit-button {
-    padding: 0.5rem 0;
+    padding: 0.5rem;
     width: 5rem;
     border-radius: 6px;
     border: 0;
@@ -299,33 +297,6 @@ b {
     font-weight: 600;
 }
 
-/* BUTTON CONTAINERS */
-
-.employee-button-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-    width: 100%;
-}
-
-.employee-button-container > * {
-    width: 9rem;
-}
-
-.schedule-button-container {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 3rem;
-}
-
-.schedule-button-container > * {
-    width: 5.5rem;
-}
-
 /* EMPLOYEE AVAILABILITY */
 
 .worker-data-fields {
@@ -379,6 +350,19 @@ b {
 
 /* DISPLAY SCHEDULE */
 
+.schedule-button-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 3rem;
+}
+
+.schedule-button-container > * {
+    width: 5.5rem;
+}
+
 .section-type {
     font-size: 1.5rem;
     align-items: center;
@@ -426,11 +410,15 @@ b {
     text-decoration: underline;
 }
 
-.schedule-list-button-container {
+.list-button-container {
     width: 100%;
     display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid rgb(120, 120, 120);
+    padding-bottom: 1rem;
     gap: 1rem;
-    justify-content: space-between;
 }
 
 
@@ -495,7 +483,41 @@ b {
     overflow: auto; /* scroll if content too tall */
 }
 
-@media screen and (min-width: 800px) {
+.action-container {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.search-container {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    width: 100%;
+}
+
+.action-button {
+    padding: 0.4rem 0.9rem;
+    border-radius: 6px;
+    border: 0;
+    background-color: rgba(255, 255, 255, 0.8);
+    cursor: pointer;
+    font: inherit;
+    font-weight: 400;   
+}
+
+.action-selection {
+    padding: 0.4rem;
+    background-color: rgb(65, 65, 65);
+    color: white;
+    border-radius: 6px;
+    border: 0;
+    flex: 1;
+}
+
+@media screen and (min-width: 850px) {
     .sidebar {
         position: static;
         transform: translateX(0);
@@ -516,5 +538,27 @@ b {
 
     .sidebar-nav {
         margin-top: 1rem;
+    }
+}
+
+@media screen and (min-width: 600px) {
+    .list-button-container {
+        flex-direction: row;
+        gap: 0;
+        justify-content: space-between;
+    }
+
+    .action-container,
+    .search-container {
+        width: auto;
+    }
+
+    .search-bar {
+        width: auto;
+    }
+
+    .action-selection,
+    .search-bar {
+        flex: 0;
     }
 }

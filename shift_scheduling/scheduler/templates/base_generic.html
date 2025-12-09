@@ -28,7 +28,7 @@
                 </ul>
                 {% if user.is_authenticated %}
                     <ul class="sidebar-user">
-                        <li>User: {{ user.get_username }}</li>
+                        <li style="font-weight: 400;">{{ user.get_username }}</li>
                         <li>
                         <form id="logout-form" method="post" action="{% url 'logout' %}">
                             {% csrf_token %}
