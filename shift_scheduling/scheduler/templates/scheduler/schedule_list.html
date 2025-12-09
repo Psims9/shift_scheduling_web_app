@@ -66,5 +66,15 @@
                 }
             });
         });
+
+        const headerCheckbox = document.querySelector('.inst-table-header-row input[type="checkbox"]');
+        const rowCheckboxes = document.querySelectorAll('.inst-table-data-row input[type="checkbox"]');
+        
+        headerCheckbox.addEventListener('change', function () {
+            rowCheckboxes.forEach(cb => {
+                cb.checked = headerCheckbox.checked;
+            });
+        });
+    
     </script>
 {% endblock %}
