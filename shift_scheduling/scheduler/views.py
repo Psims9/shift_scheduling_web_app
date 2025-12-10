@@ -178,4 +178,30 @@ def download_schedule_csv(request, pk):
             writer.writerow([date, employee_id, employee_name])
     
     return response
-            
+
+@login_required
+def worker_bulk_confirm(request):
+    # Recieves POST requests with data from forms submitted in the list pages (schedules or employees)
+    # These forms include checkboxes with values equal to worker IDs as well as a the value
+    # of the <select name="action"> element (delete or reset_data)
+    # Based these IDs and the action type, we want query these  instances
+    # and render a "confirm_bulk_action.html" tempalte which contains a list
+    # of the selected instances and the action to be performed, asking for confirmation
+    # before calling the view which performs the action
+
+    # get data from the POST request
+    selected_ids = request.POST.getlist('selected')
+    action = request.POST.get('action')
+
+    # query the DB
+    workers = Worker.objects.filter(id__in=selected_ids)
+
+    # populate context var
+    context = {
+        'selected_ids': selected_ids,
+        'action': action,        
+        'workers': workers,
+    }
+
+    return render(request, 'worker_bulk_confirm.html', context)
+

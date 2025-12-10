@@ -1,0 +1,24 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    {% if action == "delete" %}
+        <h1 class="page-title">Confirm emloyee deletion</h1>
+    {% endif %}
+
+    <p>You're about to delete the following workers. This action cannot be undone.</p>
+
+    <ul>
+        {% for worker in workers %}
+            <li>{{worker}}</li>
+        {% endfor %}
+    </ul>
+
+    <form method="post" action="">
+        {% csrf_token %}
+        {% for id in selected_ids %}
+            <input type="hidden" name="selected" value="{{id}}">
+        {% endfor %}
+
+        <button type="submit">Confirm</button>
+    </form>
+{% endblock %}

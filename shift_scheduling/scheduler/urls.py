@@ -13,5 +13,9 @@ urlpatterns = [
     path('worker/<int:pk>/delete/', views.WorkerDeleteView.as_view(), name='worker_delete'),
     path('workers/', views.WorkerListView.as_view(), name='workers'),
 
-    path('schedule/<int:pk>/download_csv', views.download_schedule_csv, name="download_schedule_csv")
+    path('schedule/<int:pk>/download_csv', views.download_schedule_csv, name="download_schedule_csv"),
+
+    path('workers/action/delete', views.worker_bulk_confirm, name='worker_bulk_confirm'),
+
+    
 ]
