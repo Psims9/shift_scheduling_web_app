@@ -11,6 +11,7 @@ import json
 from .create_schedule import create_schedule
 from .data_checks import data_checks
 import csv
+from django.views.decorators.http import require_POST
 
 @login_required
 def index(request):
@@ -180,7 +181,7 @@ def download_schedule_csv(request, pk):
     return response
 
 @login_required
-def worker_bulk_confirm(request):
+def worker_bulk_action_confirm(request):
     # Recieves POST requests with data from forms submitted in the list pages (schedules or employees)
     # These forms include checkboxes with values equal to worker IDs as well as a the value
     # of the <select name="action"> element (delete or reset_data)
@@ -205,3 +206,21 @@ def worker_bulk_confirm(request):
 
     return render(request, 'worker_bulk_confirm.html', context)
 
+@require_POST
+@login_required
+def worker_bulk_action(request):
+    selected_ids = request.POST.getlist('selected')
+    action = request.POST.get('action')
+    workers = Worker.objects.filter(id__in=selected_ids)
+
+    if action == 'delete':
+        workers.delete()
+    
+    elif action == 'reset':
+        workers.update(
+            unavailable_dates=[],
+            assign_least_shifts=False,
+            assign_least_weekends=False
+        )
+    
+    return redirect('workers')

@@ -3,22 +3,26 @@
 {% block content %}
     {% if action == "delete" %}
         <h1 class="page-title">Confirm emloyee deletion</h1>
+        <p>You're about to delete the following workers. This action cannot be undone.</p>
+    {% else %}
+        <h1 class="page-title">Confirm emloyee data reset</h1>
+        <p>You're about to reset the data of the following workers. This action cannot be undone.</p>
     {% endif %}
-
-    <p>You're about to delete the following workers. This action cannot be undone.</p>
-
+    
     <ul>
         {% for worker in workers %}
             <li>{{worker}}</li>
         {% endfor %}
     </ul>
 
-    <form method="post" action="">
+    <form method="post" action="{% url 'worker_bulk_action' %}">
         {% csrf_token %}
         {% for id in selected_ids %}
             <input type="hidden" name="selected" value="{{id}}">
         {% endfor %}
 
-        <button type="submit">Confirm</button>
+        <input type="hidden" name="action" value="{{action}}">
+
+        <button type="submit" >Confirm</button>
     </form>
 {% endblock %}

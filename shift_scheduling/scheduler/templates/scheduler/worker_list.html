@@ -4,7 +4,7 @@
     <h1 class="page-title">Employees</h1>
     <a href="{% url 'worker_create' %}" class="add-new-button" style="margin-bottom: 2rem;">+ New</a>
 
-    <form id="bulkActionForm" method="post" action="{% url 'worker_bulk_confirm' %}">
+    <form id="bulkActionForm" method="post" action="{% url 'worker_bulk_action_confirm' %}">
         {% csrf_token %}
         <div class="list-button-container">
             <div class="search-container">
@@ -14,8 +14,9 @@
             <div class="action-container">
                 <label for="action" style="align-self: center; width: 52px;">Action:</label>
                 <select id="action" class="action-selection" name="action">
-                    <option value="delete" style="display:inline-block;">Delete</option>
-                    <option value="reset" style="display:inline-block;">Reset data</option>
+                    <option selected value="" disabled>Select action</option>
+                    <option value="delete">Delete</option>
+                    <option value="reset">Reset data</option>
                 </select>
                 <button type="button" class="action-button">Go</button>
             </div>
@@ -85,11 +86,17 @@
         document.querySelector('.action-button').addEventListener('click', function () {
             const form = document.getElementById('bulkActionForm');
             const selected = document.querySelectorAll('.row-checkbox:checked');
+            const action = document.getElementById('action')
 
             if (selected.length === 0) {
                 alert('Please select at least 1 employee.')
                 return;
             };
+
+            if (!action.value) {
+                alert('Please select an action.');
+                return;
+            }            
             
             form.submit();
         });
