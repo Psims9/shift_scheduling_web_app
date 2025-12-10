@@ -3,49 +3,54 @@
 {% block content %}
     <h1 class="page-title">Employees</h1>
     <a href="{% url 'worker_create' %}" class="add-new-button" style="margin-bottom: 2rem;">+ New</a>
-    <div class="list-button-container">
-        <div class="search-container">
-            <label for="searchInput" style="align-self: center; width: 52px;">Search:</label>
-            <input type="text" id="searchInput" placeholder="Search employees..." class="search-bar">
+
+    <form id="bulkActionForm" method="post" action="{% url 'workers_bulk_action_confirm' %}">
+        {% csrf_token %}
+        <div class="list-button-container">
+            <div class="search-container">
+                <label for="searchInput" style="align-self: center; width: 52px;">Search:</label>
+                <input type="text" id="searchInput" placeholder="Search employees..." class="search-bar">
+            </div>
+            <div class="action-container">
+                <label for="action" style="align-self: center; width: 52px;">Action:</label>
+                <select id="action" class="action-selection" name="action">
+                    <option selected value="" disabled>Select action</option>
+                    <option value="delete">Delete</option>
+                    <option value="reset">Reset data</option>
+                </select>
+                <button type="button" class="action-button">Go</button>
+            </div>
         </div>
-        <div class="action-container">
-            <label for="action" style="align-self: center; width: 52px;">Action:</label>
-            <select id="action" class="action-selection">
-                <option value="delete" style="display:inline-block;">Delete</option>
-                <option value="reset" style="display:inline-block;">Reset data</option>
-            </select>
-            <button class="action-button">Go</button>
-        </div>
-    </div>
-    {% if worker_list %}
-        <table class="inst-table" style="margin-bottom: 4rem;">
-            <colgroup>
-                <col class="inst-id-column">
-                <col class="inst-name-column">
-                <col class="inst-checkbox-column">
-            </colgroup>
-            <thead>
-                <tr class="inst-table-header-row">
-                    <th class="inst-table-data"><b>ID</b></th>
-                    <th class="inst-table-data"><b>Name</b></th>
-                    <th class="inst-table-data"><input type="checkbox" class="inst-table-data" value="{{ schedule.id }}" style="align-self: center;"></th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for worker in worker_list %}
-                    <tr class="inst-table-data-row">
-                        <td class="inst-table-data">{{worker.id}}</td>
-                        <td class="inst-table-data"><a href="{{ worker.get_absolute_url }}" class="inst-detail-link">{{worker}}</a></td>
-                        <td class="inst-table-data">
-                            <input type="checkbox" class="inst-table-data" value="{{ schedule.id }}" style="align-self: center;">
-                        </td>                         
+        {% if worker_list %}
+            <table class="inst-table" style="margin-bottom: 4rem;">
+                <colgroup>
+                    <col class="inst-id-column">
+                    <col class="inst-name-column">
+                    <col class="inst-checkbox-column">
+                </colgroup>
+                <thead>
+                    <tr class="inst-table-header-row">
+                        <th class="inst-table-data"><b>ID</b></th>
+                        <th class="inst-table-data"><b>Name</b></th>
+                        <th class="inst-table-data"><input type="checkbox" id="headerCheckbox" style="align-self: center;"></th>
                     </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    {% else %}
-    <p>There are no workers yet.</p>
-    {% endif %}
+                </thead>
+                <tbody>
+                    {% for worker in worker_list %}
+                        <tr class="inst-table-data-row">
+                            <td class="inst-table-data">{{worker.id}}</td>
+                            <td class="inst-table-data"><a href="{{ worker.get_absolute_url }}" class="inst-detail-link">{{worker}}</a></td>
+                            <td class="inst-table-data">
+                                <input type="checkbox" name="selected" value="{{ worker.id }}" class="row-checkbox" style="align-self: center;">
+                            </td>                         
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+        <p>There are no workers yet.</p>
+        {% endif %}
+    </form>
 
     <script>
         const searchInput = document.getElementById('searchInput');
@@ -67,14 +72,34 @@
             });
         });
 
-        const headerCheckbox = document.querySelector('.inst-table-header-row input[type="checkbox"]');
-        const rowCheckboxes = document.querySelectorAll('.inst-table-data-row input[type="checkbox"]');
+        const headerCheckbox = document.getElementById('headerCheckbox')
+        const rowCheckboxes = document.querySelectorAll('.row-checkbox');
         
         headerCheckbox.addEventListener('change', function () {
             rowCheckboxes.forEach(cb => {
-                cb.checked = headerCheckbox.checked;
+                if (cb.closest('tr').style.display !== 'none') {
+                    cb.checked = headerCheckbox.checked;
+                }
             });
-        });        
+        });
+
+        document.querySelector('.action-button').addEventListener('click', function () {
+            const form = document.getElementById('bulkActionForm');
+            const selected = document.querySelectorAll('.row-checkbox:checked');
+            const action = document.getElementById('action')
+
+            if (selected.length === 0) {
+                alert('Please select at least 1 employee.')
+                return;
+            };
+
+            if (!action.value) {
+                alert('Please select an action.');
+                return;
+            }            
+            
+            form.submit();
+        });
     </script>
 
 {% endblock %}

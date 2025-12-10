@@ -13,5 +13,13 @@ urlpatterns = [
     path('worker/<int:pk>/delete/', views.WorkerDeleteView.as_view(), name='worker_delete'),
     path('workers/', views.WorkerListView.as_view(), name='workers'),
 
-    path('schedule/<int:pk>/download_csv', views.download_schedule_csv, name="download_schedule_csv")
+    path('schedule/<int:pk>/download_csv', views.download_schedule_csv, name="download_schedule_csv"),
+
+    path('workers/action/confirm', views.worker_bulk_action_confirm, name='workers_bulk_action_confirm'),
+    path('workers/action', views.worker_bulk_action, name='workers_bulk_action'),
+
+    path('schedules/action/confirm', views.schedules_bulk_action_confirm, name='schedules_bulk_action_confirm'),
+    path('schedules/action', views.schedules_bulk_action, name='schedules_bulk_action'),
+
+    
 ]

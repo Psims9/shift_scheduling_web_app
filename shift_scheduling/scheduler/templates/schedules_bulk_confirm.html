@@ -1,0 +1,25 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    {% if action == "delete" %}
+        <h1 class="page-title">Confirm schedule deletion</h1>
+        <p>You're about to delete the following schedules. This action cannot be undone.</p>
+    {% endif %}
+    
+    <ul>
+        {% for inst in instances %}
+            <li>{{ inst }}</li>
+        {% endfor %}
+    </ul>
+
+    <form method="post" action="{% url 'schedules_bulk_action' %}">
+        {% csrf_token %}
+        {% for id in selected_ids %}
+            <input type="hidden" name="selected" value="{{id}}">
+        {% endfor %}
+
+        <input type="hidden" name="action" value="{{action}}">
+
+        <button type="submit" >Confirm</button>
+    </form>
+{% endblock %}

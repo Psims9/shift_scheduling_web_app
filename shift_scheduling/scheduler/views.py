@@ -11,6 +11,7 @@ import json
 from .create_schedule import create_schedule
 from .data_checks import data_checks
 import csv
+from django.views.decorators.http import require_POST
 
 @login_required
 def index(request):
@@ -178,4 +179,66 @@ def download_schedule_csv(request, pk):
             writer.writerow([date, employee_id, employee_name])
     
     return response
-            
+
+@login_required
+def worker_bulk_action_confirm(request):
+
+    selected_ids = request.POST.getlist('selected')
+    action = request.POST.get('action')
+
+    instances = Worker.objects.filter(id__in=selected_ids)
+
+    context = {
+        'selected_ids': selected_ids,
+        'action': action,        
+        'instances': instances,
+    }
+
+    return render(request, 'worker_bulk_confirm.html', context)
+
+@require_POST
+@login_required
+def worker_bulk_action(request):
+    selected_ids = request.POST.getlist('selected')
+    action = request.POST.get('action')
+    instances = Worker.objects.filter(id__in=selected_ids)
+
+    if action == 'delete':
+        instances.delete()
+    
+    elif action == 'reset':
+        instances.update(
+            unavailable_dates=[],
+            assign_least_shifts=False,
+            assign_least_weekends=False
+        )
+    
+    return redirect('workers')
+
+@login_required
+def schedules_bulk_action_confirm(request):
+
+    selected_ids = request.POST.getlist('selected')
+    action = request.POST.get('action')
+
+    instances = Schedule.objects.filter(id__in=selected_ids)
+
+    context = {
+        'selected_ids': selected_ids,
+        'action': action,        
+        'instances': instances,
+    }
+
+    return render(request, 'schedules_bulk_confirm.html', context)
+
+@require_POST
+@login_required
+def schedules_bulk_action(request):
+    selected_ids = request.POST.getlist('selected')
+    action = request.POST.get('action')
+    instances = Schedule.objects.filter(id__in=selected_ids)
+
+    if action == 'delete':
+        instances.delete()
+        
+    return redirect('schedules')

@@ -1,0 +1,28 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    {% if action == "delete" %}
+        <h1 class="page-title">Confirm emloyee deletion</h1>
+        <p>You're about to delete the following workers. This action cannot be undone.</p>
+    {% else %}
+        <h1 class="page-title">Confirm emloyee data reset</h1>
+        <p>You're about to reset the data of the following workers. This action cannot be undone.</p>
+    {% endif %}
+    
+    <ul>
+        {% for inst in instances %}
+            <li>{{inst}}</li>
+        {% endfor %}
+    </ul>
+
+    <form method="post" action="{% url 'workers_bulk_action' %}">
+        {% csrf_token %}
+        {% for id in selected_ids %}
+            <input type="hidden" name="selected" value="{{id}}">
+        {% endfor %}
+
+        <input type="hidden" name="action" value="{{action}}">
+
+        <button type="submit" >Confirm</button>
+    </form>
+{% endblock %}
