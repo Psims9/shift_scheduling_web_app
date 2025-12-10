@@ -3,17 +3,32 @@
 {% block content %}
     {% if action == "delete" %}
         <h1 class="page-title">Confirm emloyee deletion</h1>
-        <p>You're about to delete the following workers. This action cannot be undone.</p>
+        <p style="margin-bottom: 2rem;">You're about to delete the following workers. This action cannot be undone.</p>
     {% else %}
         <h1 class="page-title">Confirm emloyee data reset</h1>
-        <p>You're about to reset the data of the following workers. This action cannot be undone.</p>
+        <p style="margin-bottom: 2rem;">You're about to reset the data of the following workers. This action cannot be undone.</p>
     {% endif %}
     
-    <ul>
-        {% for inst in instances %}
-            <li>{{inst}}</li>
-        {% endfor %}
-    </ul>
+    <table class="inst-table" style="margin-bottom: 3rem;">
+        <colgroup>
+            <col class="inst-id-column">
+            <col class="inst-name-column">
+        </colgroup>
+        <thead>
+            <tr class="inst-table-header-row">
+                <th class="inst-table-data"><b>ID</b></th>
+                <th class="inst-table-data"><b>Name</b></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for inst in instances %}
+                <tr class="inst-table-data-row">
+                    <td class="inst-table-data">{{inst.id}}</td>
+                    <td class="inst-table-data">{{inst}}</td>                      
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
     <form method="post" action="{% url 'workers_bulk_action' %}">
         {% csrf_token %}
@@ -23,6 +38,6 @@
 
         <input type="hidden" name="action" value="{{action}}">
 
-        <button type="submit" >Confirm</button>
+        <button type="submit" class="form-submit-button">Confirm</button>
     </form>
 {% endblock %}
