@@ -3,14 +3,29 @@
 {% block content %}
     {% if action == "delete" %}
         <h1 class="page-title">Confirm schedule deletion</h1>
-        <p>You're about to delete the following schedules. This action cannot be undone.</p>
+        <p style="margin-bottom: 2rem;">You're about to delete the following schedules. This action cannot be undone.</p>
     {% endif %}
     
-    <ul>
-        {% for inst in instances %}
-            <li>{{ inst }}</li>
-        {% endfor %}
-    </ul>
+    <table class="inst-table" style="margin-bottom: 3rem;">
+        <colgroup>
+            <col class="inst-id-column">
+            <col class="inst-name-column">
+        </colgroup>
+        <thead>
+            <tr class="inst-table-header-row">
+                <th class="inst-table-data"><b>ID</b></th>
+                <th class="inst-table-data"><b>Schedule period</b></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for inst in instances %}
+                <tr class="inst-table-data-row">
+                    <td class="inst-table-data">{{inst.id}}</td>
+                    <td class="inst-table-data">{{inst}}</td>                      
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
     <form method="post" action="{% url 'schedules_bulk_action' %}">
         {% csrf_token %}
@@ -20,6 +35,6 @@
 
         <input type="hidden" name="action" value="{{action}}">
 
-        <button type="submit" >Confirm</button>
+        <button type="submit" class="form-submit-button">Confirm</button>
     </form>
 {% endblock %}
