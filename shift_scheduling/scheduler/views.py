@@ -182,26 +182,16 @@ def download_schedule_csv(request, pk):
 
 @login_required
 def worker_bulk_action_confirm(request):
-    # Recieves POST requests with data from forms submitted in the list pages (schedules or employees)
-    # These forms include checkboxes with values equal to worker IDs as well as a the value
-    # of the <select name="action"> element (delete or reset_data)
-    # Based these IDs and the action type, we want query these  instances
-    # and render a "confirm_bulk_action.html" tempalte which contains a list
-    # of the selected instances and the action to be performed, asking for confirmation
-    # before calling the view which performs the action
 
-    # get data from the POST request
     selected_ids = request.POST.getlist('selected')
     action = request.POST.get('action')
 
-    # query the DB
-    workers = Worker.objects.filter(id__in=selected_ids)
+    instances = Worker.objects.filter(id__in=selected_ids)
 
-    # populate context var
     context = {
         'selected_ids': selected_ids,
         'action': action,        
-        'workers': workers,
+        'instances': instances,
     }
 
     return render(request, 'worker_bulk_confirm.html', context)
@@ -211,16 +201,44 @@ def worker_bulk_action_confirm(request):
 def worker_bulk_action(request):
     selected_ids = request.POST.getlist('selected')
     action = request.POST.get('action')
-    workers = Worker.objects.filter(id__in=selected_ids)
+    instances = Worker.objects.filter(id__in=selected_ids)
 
     if action == 'delete':
-        workers.delete()
+        instances.delete()
     
     elif action == 'reset':
-        workers.update(
+        instances.update(
             unavailable_dates=[],
             assign_least_shifts=False,
             assign_least_weekends=False
         )
     
     return redirect('workers')
+
+@login_required
+def schedules_bulk_action_confirm(request):
+
+    selected_ids = request.POST.getlist('selected')
+    action = request.POST.get('action')
+
+    instances = Schedule.objects.filter(id__in=selected_ids)
+
+    context = {
+        'selected_ids': selected_ids,
+        'action': action,        
+        'instances': instances,
+    }
+
+    return render(request, 'schedules_bulk_confirm.html', context)
+
+@require_POST
+@login_required
+def schedules_bulk_action(request):
+    selected_ids = request.POST.getlist('selected')
+    action = request.POST.get('action')
+    instances = Schedule.objects.filter(id__in=selected_ids)
+
+    if action == 'delete':
+        instances.delete()
+        
+    return redirect('schedules')

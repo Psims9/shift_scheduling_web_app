@@ -2,20 +2,17 @@
 
 {% block content %}
     {% if action == "delete" %}
-        <h1 class="page-title">Confirm emloyee deletion</h1>
-        <p>You're about to delete the following workers. This action cannot be undone.</p>
-    {% else %}
-        <h1 class="page-title">Confirm emloyee data reset</h1>
-        <p>You're about to reset the data of the following workers. This action cannot be undone.</p>
+        <h1 class="page-title">Confirm schedule deletion</h1>
+        <p>You're about to delete the following schedules. This action cannot be undone.</p>
     {% endif %}
     
     <ul>
         {% for inst in instances %}
-            <li>{{inst}}</li>
+            <li>{{ inst }}</li>
         {% endfor %}
     </ul>
 
-    <form method="post" action="{% url 'workers_bulk_action' %}">
+    <form method="post" action="{% url 'schedules_bulk_action' %}">
         {% csrf_token %}
         {% for id in selected_ids %}
             <input type="hidden" name="selected" value="{{id}}">

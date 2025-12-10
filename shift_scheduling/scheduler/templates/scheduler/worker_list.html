@@ -4,7 +4,7 @@
     <h1 class="page-title">Employees</h1>
     <a href="{% url 'worker_create' %}" class="add-new-button" style="margin-bottom: 2rem;">+ New</a>
 
-    <form id="bulkActionForm" method="post" action="{% url 'worker_bulk_action_confirm' %}">
+    <form id="bulkActionForm" method="post" action="{% url 'workers_bulk_action_confirm' %}">
         {% csrf_token %}
         <div class="list-button-container">
             <div class="search-container">

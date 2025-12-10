@@ -15,8 +15,11 @@ urlpatterns = [
 
     path('schedule/<int:pk>/download_csv', views.download_schedule_csv, name="download_schedule_csv"),
 
-    path('workers/action/confirm', views.worker_bulk_action_confirm, name='worker_bulk_action_confirm'),
-    path('workers/action/delete', views.worker_bulk_action, name='worker_bulk_action')
+    path('workers/action/confirm', views.worker_bulk_action_confirm, name='workers_bulk_action_confirm'),
+    path('workers/action', views.worker_bulk_action, name='workers_bulk_action'),
+
+    path('schedules/action/confirm', views.schedules_bulk_action_confirm, name='schedules_bulk_action_confirm'),
+    path('schedules/action', views.schedules_bulk_action, name='schedules_bulk_action'),
 
     
 ]
