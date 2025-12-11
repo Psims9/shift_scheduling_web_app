@@ -31,7 +31,7 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-o=_xk@qpbd=ogo
 # DEBUG = True
 DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['psims99.pythonanywhere.com', '127.0.0.1']
 
 
 # Application definition
@@ -144,3 +144,5 @@ if 'DATABASE_URL' in os.environ:
 
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATIC_URL = '/static/'
+
+CSRF_TRUSTED_ORIGINS = ['https://psims99.pythonanywhere.com']
