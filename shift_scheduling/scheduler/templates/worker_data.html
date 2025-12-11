@@ -42,7 +42,7 @@
         <button type="submit" class="form-submit-button" style="align-self: start;">Save</button>
     </form>
 
-    <button class="delete-button" style="align-self: start;">Delete</button>
+    <a href="{% url 'worker_delete' worker.id %}" class="delete-button" style="align-self: start;">Delete</a>
 
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>

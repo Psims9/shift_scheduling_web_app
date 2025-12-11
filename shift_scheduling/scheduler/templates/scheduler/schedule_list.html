@@ -2,7 +2,7 @@
 
 {% block content %}
     <h1 class="page-title">Schedules</h1>
-    <a href="{% url 'worker_create' %}" class="add-new-button" style="margin-bottom: 2rem;">+ New</a>
+    <a href="{% url 'create_schedule' %}" class="add-new-button" style="margin-bottom: 2rem;">+ New</a>
     <form id="bulkActionForm" method="post" action="{% url 'schedules_bulk_action_confirm' %}">
         {% csrf_token %}
         <div class="list-button-container">
